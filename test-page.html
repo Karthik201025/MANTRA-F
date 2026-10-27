@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Console Error Check</title>
+</head>
+<body>
+    <h1>Opening Mantra and checking console...</h1>
+    <iframe id="app" src="http://127.0.0.1:3000/" style="width:100%;height:600px;border:1px solid #ccc;"></iframe>
+    <div id="console-output" style="margin-top:20px;padding:10px;background:#f0f0f0;font-family:monospace;white-space:pre-wrap;"></div>
+    <script>
+        // Capture console errors
+        const output = document.getElementById('console-output');
+        const originalError = console.error;
+        console.error = function(...args) {
+            output.textContent += 'ERROR: ' + args.join(' ') + '\n';
+            originalError.apply(console, args);
+        };
+
+        setTimeout(() => {
+            output.textContent += '\n=== After 3 seconds ===\n';
+            output.textContent += 'Page loaded. Check iframe above.\n';
+        }, 3000);
+    </script>
+</body>
+</html>

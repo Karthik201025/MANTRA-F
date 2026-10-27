@@ -1,0 +1,929 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111027">
+<title>Mantra — Unleash Your Childhood Again</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+:root {
+  --bg:#111027; --panel:#242047; --accent:#8b70f5;
+  --soft:#f4a8e7; --fg:#fff9ff; --muted:#c3bedc;
+  --line:#665b9c;
+}
+* { box-sizing:border-box }
+body { margin:0;background:var(--bg);color:var(--fg);font-family:Nunito,sans-serif;transition:background .25s,color .25s }
+button,input,textarea,select { font:inherit }
+button { cursor:pointer;color:inherit }
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible { outline:3px solid var(--soft);outline-offset:3px }
+.hidden { display:none!important }
+.pixel { font-family:'Press Start 2P',monospace;line-height:1.8 }
+.muted { color:var(--muted);line-height:1.8 }
+.eyebrow { color:var(--soft);font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase }
+.gradient { background:linear-gradient(100deg,#c3b5ff,#ffb9ee);background-clip:text;-webkit-background-clip:text;color:transparent }
+h1 { font-size:clamp(30px,5vw,62px);line-height:1.35;letter-spacing:-2px;margin:18px 0 }
+h2 { font-size:27px;line-height:1.5 }
+h3 { line-height:1.5 }
+p { line-height:1.8 }
+.brand { display:flex;align-items:center;gap:12px;font-size:26px;font-weight:900;letter-spacing:2px }
+.brand small { display:block;font-size:9px;letter-spacing:3px;color:var(--soft);margin-top:2px }
+.logo { width:48px;height:48px;flex-shrink:0;image-rendering:pixelated }
+.topbar { display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 5%;background:var(--bg);border-bottom:4px solid var(--panel);position:relative;z-index:5 }
+.pixel-btn { border:0;border-radius:0;padding:13px 17px;background:var(--accent);box-shadow:0 5px 0 #39266e,0 0 0 2px #b6a5ff inset;font-weight:900;transition:transform .15s; }
+.pixel-btn:hover { transform:translateY(-2px) }
+.pixel-btn.pink { background:var(--soft);color:#21152f;box-shadow:0 5px 0 #49304f,0 0 0 2px #fff0ff inset }
+.pixel-btn.dark { background:var(--panel);box-shadow:0 5px 0 #100d29,0 0 0 2px #61568c inset }
+.childhood-tag { margin-top:14px;font-size:10px;letter-spacing:3px;font-weight:900;color:var(--soft) }
+.landing-hero { min-height:600px;display:grid;grid-template-columns:1fr 1.1fr;align-items:center;gap:28px;padding:50px 6%;background:linear-gradient(#171332,#28204c 65%,#49376e);overflow:hidden }
+.hero-copy { max-width:600px;position:relative;z-index:2 }
+.hero-copy p { max-width:480px;color:#d0c9e7;font-size:17px;line-height:1.8 }
+.hero-actions { display:flex;gap:14px;flex-wrap:wrap;margin-top:25px }
+.pixel-world { height:420px;position:relative;overflow:hidden;background:linear-gradient(#27204c,#58457c 70%,#9670a0);border:5px solid #74669d;box-shadow:0 0 0 5px #17132f,12px 12px #0b0920 }
+.stars { position:absolute;inset:0;background-image:radial-gradient(#fff 1.5px,transparent 2px),radial-gradient(#d8c9ff 2px,transparent 3px);background-size:83px 91px,127px 119px;animation:stars 16s linear infinite }
+@keyframes stars { to { background-position:83px 91px,-127px 119px } }
+.moon { position:absolute;top:48px;right:55px;width:65px;height:65px;background:#ffe3f7;box-shadow:0 0 35px #f6c6ff }
+.cloud { position:absolute;height:18px;width:80px;background:#9b8bd0;box-shadow:18px -18px #9b8bd0,36px -18px #9b8bd0,54px 0 #9b8bd0,18px 18px #9b8bd0,36px 18px #9b8bd0;animation:cloud 18s linear infinite }
+.cloud.one { top:100px;left:-100px }.cloud.two { top:195px;left:60%;animation-delay:-9s }
+@keyframes cloud { to { margin-left:550px } }
+.portal { position:absolute;bottom:83px;left:50%;transform:translateX(-50%);width:160px;height:235px;border:15px solid #a891ff;box-shadow:0 0 0 7px #4b347c,0 0 35px #bd9bff,0 0 90px #c29aff77;background:radial-gradient(ellipse,#e9b5ff,#9c6de9 40%,#473177 75%);animation:glow 3s ease-in-out infinite }
+@keyframes glow { 50% { box-shadow:0 0 0 7px #4b347c,0 0 55px #d3b4ff,0 0 115px #c29aff99 } }
+.world-label { position:absolute;top:17px;left:15px;background:#15102ddd;border:2px solid #9582d4;padding:10px;font-size:9px }
+.pixel-person { position:absolute;z-index:2;width:90px;height:165px;bottom:65px;animation:float 3s ease-in-out infinite }
+.pixel-person.girl { left:calc(50% - 122px) }.pixel-person.boy { left:calc(50% + 38px);animation-delay:-1.5s }
+@keyframes float { 50% { translate:0 -7px } }
+.pixel-head { position:absolute;left:24px;top:12px;width:42px;height:42px;background:#edbd9f;border:3px solid #2b1d38;z-index:3 }
+.pixel-hair { position:absolute;top:3px;left:17px;width:55px;height:45px;background:#211a30;z-index:4 }
+.pixel-hair:after { content:"";position:absolute;top:25px;left:-7px;width:12px;height:85px;background:#211a30;box-shadow:57px 0 #211a30 }
+.pixel-eyes { position:absolute;top:30px;left:33px;z-index:5;width:5px;height:5px;background:#24162c;box-shadow:17px 0 #24162c }
+.pixel-body { position:absolute;top:55px;left:20px;width:52px;height:50px;background:#c0a3ff;border:3px solid #2b1d38 }
+.girl .pixel-body { background:#f1a8dc }
+.pixel-arm { position:absolute;top:60px;left:8px;width:13px;height:44px;background:#edbd9f;border:2px solid #2b1d38 }
+.pixel-arm.right { left:71px }
+.pixel-legs { position:absolute;top:102px;left:27px;width:17px;height:39px;background:#342447;border:2px solid #2b1d38;box-shadow:21px 0 #342447 }
+.pixel-shoes { position:absolute;top:138px;left:21px;width:24px;height:13px;background:#20172c;box-shadow:23px 0 #20172c }
+.ground { position:absolute;bottom:0;left:0;width:100%;height:90px;background:#57446d;border-top:14px solid #a38aab }
+.ground:after { content:"";position:absolute;inset:14px 0 0;background:repeating-linear-gradient(90deg,transparent 0 38px,#3e315d 39px 42px) }
+.world-section { max-width:1200px;margin:auto;padding:55px 6% }
+.feature-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px }
+.game-card { background:var(--panel);border:3px solid var(--line);box-shadow:5px 5px #0a0919;padding:22px;min-width:0 }
+.game-card:hover { border-color:var(--soft) }
+.feature-number { color:var(--soft);font-family:'Press Start 2P',monospace;font-size:11px }
+.footer { text-align:center;padding:35px 6%;border-top:3px solid #29234e;color:var(--muted) }
+.screen { min-height:100vh;background:var(--bg) }
+.game-app { min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr) }
+.sidebar { background:var(--bg);border-right:4px solid #33284e;padding:20px 14px;min-width:0 }
+.nav { display:grid;gap:8px;margin-top:30px }
+.nav button { text-align:left;padding:12px;background:transparent;border:2px solid transparent;font-weight:800 }
+.nav button:hover,.nav button.active { background:var(--panel);border-color:var(--accent) }
+.main { min-width:0 }
+.app-header { padding:22px 30px;border-bottom:3px solid #33284e;background:var(--panel) }
+.content { padding:28px;max-width:1200px;margin:auto;min-width:0 }
+.welcome { padding:28px;background:linear-gradient(125deg,var(--panel),var(--bg));border:3px solid #7662b3;box-shadow:7px 7px #0b091b }
+.field { margin:18px 0 }
+.field label { display:block;font-weight:800;line-height:1.7 }
+.game-input { width:100%;background:var(--bg);color:var(--fg);border:2px solid #514575;padding:13px;margin-top:8px;border-radius:0 }
+.notice { background:var(--bg);border-left:4px solid var(--soft);padding:14px;color:var(--muted);line-height:1.8;font-size:13px }
+.two-column { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px }
+.option { display:block;padding:12px;margin:9px 0;border:2px solid #514575;background:var(--bg);cursor:pointer;line-height:1.7 }
+.option:has(input:checked) { border-color:#c2adff;background:var(--panel) }
+.option input { accent-color:#b9a3ff;margin-right:10px }
+.result { margin-top:20px;padding:20px;background:var(--panel);border:3px solid #b9a3ff }
+.post { padding:18px;margin:16px 0;background:var(--panel);border:2px solid #514575;overflow-wrap:anywhere }
+.post p { white-space:pre-wrap }
+.chat { height:300px;overflow-y:auto;padding:15px;background:var(--bg);border:2px solid #514575 }
+.bubble { background:var(--panel);padding:12px 15px;margin:10px 0;max-width:88%;line-height:1.8;overflow-wrap:anywhere;white-space:pre-wrap }
+.bubble.mine { margin-left:auto;background:#5c418f;color:white }
+.breath { width:170px;height:170px;margin:30px auto;display:grid;place-items:center;text-align:center;background:var(--accent);border:7px solid #c3b5ff;box-shadow:0 0 0 6px #39295c,0 0 40px #ad91ff55;animation:breathe 8s ease-in-out infinite }
+@keyframes breathe { 0%,100% { transform:scale(.82) }50% { transform:scale(1.1) } }
+.paused { animation-play-state:paused }
+.toast { position:fixed;z-index:20;bottom:20px;left:50%;transform:translateX(-50%);max-width:90%;padding:14px 18px;background:#f9eaff;color:#1a1230;border:3px solid #ad91ff;font-weight:900 }
+.universe-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:25px 0 }
+.universe-choice { text-align:left;min-height:125px;padding:18px;background:var(--panel);border:3px solid #514575;box-shadow:5px 5px #0a0919 }
+.universe-choice:hover,.universe-choice.selected { border-color:var(--soft);transform:translateY(-2px) }
+.universe-choice strong { display:block;margin:8px 0 }
+.universe-choice small { color:var(--muted);line-height:1.6 }
+.companion-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:22px;align-items:stretch;margin:22px 0 }
+.companion-choice { display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;min-width:0;min-height:245px;padding:18px 12px;background:var(--panel);border:3px solid #514575;box-shadow:4px 4px #0a0919;text-align:center;overflow:visible }
+.companion-choice:hover,.companion-choice.selected { border-color:var(--soft) }
+.companion-choice strong { display:block;width:100%;margin:0;padding-top:8px;font-size:14px;line-height:1.5;overflow-wrap:anywhere }
+.companion-choice small { display:block;width:100%;min-height:34px;color:var(--muted);line-height:1.5;overflow-wrap:anywhere }
+.lego-figure { --skin:#f0c39e;--hair:#252039;--outfit:#8b70f5;--detail:#f4a8e7;position:relative;display:block;width:100px;height:145px;flex:0 0 145px;margin:0 auto;overflow:visible;filter:drop-shadow(3px 4px 0 #08071366) }
+.lego-head { position:absolute;left:31px;top:15px;z-index:3;width:38px;height:35px;background:linear-gradient(90deg,#0002,transparent 22%,#fff3 75%,#0002),var(--skin);border:3px solid #191426;border-radius:10px 10px 7px 7px;box-shadow:inset 0 -3px #0002 }
+.lego-hair { position:absolute;left:26px;top:8px;z-index:5;width:48px;height:17px;background:var(--hair);border:3px solid #191426;border-radius:8px 8px 3px 3px;box-shadow:-3px 12px 0 -1px var(--hair),3px 12px 0 -1px var(--hair) }
+.lego-neck { position:absolute;left:42px;top:47px;z-index:2;width:16px;height:9px;background:var(--skin);border-left:3px solid #191426;border-right:3px solid #191426 }
+.lego-face { position:absolute;left:39px;top:29px;z-index:6;width:4px;height:5px;background:#21172e;box-shadow:15px 0 #21172e }
+.lego-face:after { content:"";position:absolute;top:10px;left:5px;width:8px;height:3px;background:#9b525b;border-radius:0 0 5px 5px }
+.lego-body { position:absolute;left:23px;top:53px;z-index:3;width:54px;height:39px;background:linear-gradient(90deg,#0002,transparent 25%,#fff2 75%,#0002),var(--outfit);border:3px solid #191426;border-radius:5px 5px 3px 3px;box-shadow:inset 0 -4px #0002 }
+.lego-body:after { content:"";position:absolute;left:20px;top:6px;width:7px;height:7px;background:var(--detail);border:1px solid #191426 }
+.lego-arm { position:absolute;left:10px;top:57px;z-index:2;width:17px;height:33px;background:linear-gradient(90deg,#0002,transparent 55%),var(--outfit);border:3px solid #191426;border-radius:6px 6px 4px 4px }
+.lego-arm.right { left:73px }
+.lego-arm:after { content:"";position:absolute;left:-1px;bottom:-8px;width:13px;height:13px;background:var(--skin);border:3px solid #191426;border-radius:40% 40% 50% 50% }
+.lego-leg { position:absolute;left:29px;top:91px;z-index:2;width:19px;height:34px;background:linear-gradient(90deg,#0003,transparent 65%),#29223d;border:3px solid #191426;border-radius:2px 2px 4px 4px }
+.lego-leg.right { left:51px }
+.lego-leg:after { content:"";position:absolute;left:-5px;bottom:-6px;width:21px;height:9px;background:var(--detail);border:3px solid #191426;border-radius:2px 4px 2px 2px }
+.lego-cape { position:absolute;z-index:1;left:14px;top:52px;width:72px;height:48px;background:var(--detail);border:2px solid #191426;clip-path:polygon(15% 0,85% 0,100% 100%,0 100%) }
+.lego-accessory { position:absolute;left:29px;top:5px;z-index:7;width:42px;height:25px;pointer-events:none }
+.lego-figure.kitty .lego-hair { background:#fff8fc;border-color:#d9a3c0;box-shadow:-3px 12px 0 -1px #fff8fc,3px 12px 0 -1px #fff8fc }
+.lego-figure.kitty .lego-accessory:before,.lego-figure.kitty .lego-accessory:after { content:"";position:absolute;top:0;width:15px;height:13px;background:#ff80b8;border:3px solid #a84c78;border-radius:4px 8px 3px 8px }
+.lego-figure.kitty .lego-accessory:before { left:0;transform:rotate(-15deg) }
+.lego-figure.kitty .lego-accessory:after { right:0;transform:rotate(15deg) }
+.lego-figure.kuromi .lego-accessory:before { content:"";position:absolute;left:5px;top:-3px;width:28px;height:23px;background:#292333;border:3px solid #191426;clip-path:polygon(0 0,30% 18%,50% 0,70% 18%,100% 0,88% 100%,12% 100%) }
+.lego-figure.batman .lego-accessory:before { content:"";position:absolute;left:4px;top:-3px;width:34px;height:25px;background:#17151f;border:2px solid #d7c44a;clip-path:polygon(0 15%,25% 28%,35% 0,50% 22%,65% 0,75% 28%,100% 15%,88% 100%,12% 100%) }
+.lego-figure.super .lego-body:after { content:"S";left:17px;top:5px;width:14px;height:14px;line-height:14px;text-align:center;color:white;font-weight:900;background:#c92d40;border:2px solid #f3d45b }
+.lego-figure.princess .lego-accessory:before { content:"";position:absolute;left:5px;top:-3px;width:30px;height:22px;background:#e5c55d;border:3px solid #8d6727;clip-path:polygon(0 100%,8% 25%,28% 50%,50% 0,72% 50%,92% 25%,100% 100%) }
+.lego-guide,.companion-banner { display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:18px;margin:18px 0;background:var(--panel);border:3px solid var(--accent) }
+.lego-guide .lego-figure,.companion-banner .lego-figure { flex:0 0 100px }
+.theme-row { display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 20px }
+.theme-swatch { border:2px solid #71659b;background:var(--panel);padding:9px 11px;font-size:11px;font-weight:900;color:var(--fg);max-width:100%;overflow-wrap:anywhere }
+.theme-swatch.active { border-color:var(--soft);outline:1px solid var(--soft) }
+.theme-dot { display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:middle;background:var(--swatch) }
+.theme-group { flex-basis:100%;font-weight:900;margin-top:12px;color:var(--soft) }
+.theme-menu-wrap { margin-top:18px;position:relative }
+.theme-menu-button { width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px;background:var(--panel);border:2px solid var(--accent);color:var(--fg);font-weight:900;cursor:pointer }
+.theme-menu-panel { margin-top:8px;padding:12px;background:var(--panel);border:2px solid var(--line);max-height: min(52vh,430px);overflow:auto;box-shadow:4px 4px #0a0919 }
+.theme-menu-panel[hidden] { display:none }
+.theme-menu-panel .theme-row { margin:0 }
+.career-chat { display:grid;gap:10px;margin:18px 0;max-height:440px;overflow:auto;padding:14px;background:var(--bg);border:2px solid var(--line) }
+.career-message { padding:14px;background:var(--panel);border:2px solid var(--line);white-space:pre-wrap;line-height:1.8;overflow-wrap:anywhere }
+.career-message.mine { margin-left:8%;background:#5c418f;color:#fff }
+.career-message.ai { margin-right:5%;border-color:var(--soft) }
+.career-roadmap { margin-top:18px;padding:20px;background:var(--panel);border:3px solid var(--accent);line-height:1.85;overflow-wrap:anywhere }
+.career-roadmap h2,.career-roadmap h3 { color:var(--soft) }
+.career-roadmap ul,.career-roadmap ol { padding-left:24px }
+.career-chip { display:inline-block;margin:4px;padding:7px 10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:12px }
+
+.entry-test { margin-top:22px;padding:22px;border:3px solid var(--accent);background:var(--panel) }
+.moderation-row { padding:16px;margin:12px 0;border:2px solid var(--line);background:var(--bg);overflow-wrap:anywhere }
+.status-pill { display:inline-block;padding:5px 8px;background:var(--soft);color:#21152f;font-size:11px;font-weight:900 }
+@media(max-width:850px) {
+ .landing-hero { grid-template-columns:1fr;padding:38px 6% }
+ .pixel-world { height:370px }
+ .feature-grid { grid-template-columns:1fr }
+ .game-app { grid-template-columns:1fr }
+ .sidebar { border-right:0;border-bottom:4px solid #33284e }
+ .nav { display:flex;overflow-x:auto;margin-top:15px }
+ .nav button { white-space:nowrap }
+ .content { padding:18px }
+ .app-header { padding:18px }
+ .universe-grid { grid-template-columns:repeat(2,minmax(0,1fr)) }
+}
+@media(max-width:480px) {
+ .brand { font-size:21px }
+ .logo { width:40px;height:40px }
+ .topbar { padding:13px 4% }
+ .pixel-world { height:320px }
+ .portal { transform:translateX(-50%) scale(.75);transform-origin:bottom center }
+ .two-column { grid-template-columns:1fr }
+ .world-section { padding:38px 6% }
+ .universe-grid { grid-template-columns:1fr }
+ .companion-grid { grid-template-columns:repeat(2,minmax(0,1fr));gap:13px }
+ .companion-choice { min-height:230px;padding:14px 8px }
+ .content { padding:14px }
+}
+@media(prefers-reduced-motion:reduce) {
+ *,*::before,*::after { animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important }
+}
+
+/* Interactive companion game polish */
+.companion-game-top{display:flex;align-items:center;gap:16px;text-align:left;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:14px;margin:16px 0}
+.companion-game-top .avatar{flex:0 0 auto}.mode-choice{border:1px solid #9a8ae8!important;border-radius:16px!important;background:rgba(139,112,245,.16)!important;transition:transform .18s,background .18s}.mode-choice:hover{transform:translateY(-4px);background:rgba(244,168,231,.2)!important}.cloud-arena{position:relative;min-height:190px;overflow:hidden;border-radius:18px;background:linear-gradient(180deg,#8bc5ff 0%,#d9c8ff 58%,#f6c9e8 100%);padding:20px;margin:18px 0}.cloud-target{border:0;background:transparent;font-size:48px;filter:drop-shadow(0 8px 3px #7c6da255);animation:cloudBob 2.3s ease-in-out infinite;transition:transform .25s,opacity .25s}.cloud-target:hover{transform:scale(1.15)}.cloud-target.popped{animation:cloudFall .65s forwards;pointer-events:none}.cloud-target:disabled{opacity:.22}.game-world-floor{height:18px;border-radius:50%;background:rgba(73,48,112,.22);margin-top:4px}.game-hud{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#fff;font-weight:900}.game-toast{background:#fff9ff;color:#30234c;border-radius:14px;padding:14px;margin:12px auto;max-width:540px;box-shadow:0 8px 25px #24143b22;animation:popIn .25s ease-out}.game-next{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:10px 16px;background:#f4a8e7;color:#25153d;font-weight:900;border:0;margin:6px}@keyframes cloudBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}@keyframes cloudFall{to{transform:translateY(140px) rotate(22deg) scale(.65);opacity:0}}@keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+</style>
+</head>
+<body>
+
+<!-- Mantra logo mark preserved -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="mantra-mark" viewBox="0 0 16 16">
+<path fill="#f3a8e7" d="M3 1h3v1h2V1h3v1h2v3h1v3h-2v2h-2v2H8v2H6v-2H4v-2H2V8H1V5h1V2h1z"/>
+<path fill="#c4b2ff" d="M3 3h2v2H3zm5 0h2v2H8zM5 7h2v2H5zm2 2h2v2H7z"/>
+<path fill="#e9dfff" d="M1 9h3v2h2v2H4v-1H2v-1H1zm14 0h-3v2h-2v2h2v-1h2v-1h1z"/>
+<path fill="#a995ff" d="M4 11h2v2H4zm6 0h2v2h-2z"/>
+</symbol>
+</svg>
+
+<div id="landing">
+<header class="topbar">
+ <div class="brand"><svg class="logo" viewBox="0 0 16 16"><use href="#mantra-mark"/></svg><div>mantra<small>YOUR WORLD. YOUR JOURNEY.</small></div></div>
+ <button class="pixel-btn" onclick="start()">ENTER WORLD →</button>
+</header>
+<main class="landing-hero">
+ <div class="hero-copy">
+  <div class="eyebrow">A new world is waiting</div>
+  <div class="childhood-tag">UNLEASH YOUR CHILDHOOD AGAIN</div>
+  <h1>Your story.<br>Your world.<br><span class="gradient">Your next chapter.</span></h1>
+  <p>Some days feel like starting from zero. That's okay. Build your world one small block at a time, find spaces where you can be yourself, and discover your own way forward.</p>
+  <div class="hero-actions"><button class="pixel-btn pink" onclick="start()">CHOOSE YOUR COMPANION →</button><button class="pixel-btn dark" onclick="$('inside').scrollIntoView({behavior:'smooth'})">EXPLORE MANTRA</button></div>
+  <p style="font-size:12px">A peer-support experience, not a replacement for professional care.</p>
+ </div>
+ <div class="pixel-world">
+  <div class="stars"></div><div class="moon"></div><div class="cloud one"></div><div class="cloud two"></div>
+  <div class="world-label pixel">WORLD 001<br>THE BEGINNING</div><div class="portal"></div>
+  <div class="pixel-person girl"><div class="pixel-hair"></div><div class="pixel-head"></div><div class="pixel-eyes"></div><div class="pixel-body"></div><div class="pixel-arm"></div><div class="pixel-arm right"></div><div class="pixel-legs"></div><div class="pixel-shoes"></div></div>
+  <div class="pixel-person boy"><div class="pixel-hair"></div><div class="pixel-head"></div><div class="pixel-eyes"></div><div class="pixel-body"></div><div class="pixel-arm"></div><div class="pixel-arm right"></div><div class="pixel-legs"></div><div class="pixel-shoes"></div></div>
+  <div class="ground"></div>
+ </div>
+</main>
+<section class="world-section" id="inside">
+ <div class="eyebrow">Your world has many paths</div><h2>Every journey is different.</h2><p class="muted">No leaderboard for healing. No pressure to be perfect.</p>
+ <div class="feature-grid">
+  <article class="game-card"><div class="feature-number">LEVEL 01</div><h3>Find your Right Match</h3><p>Explore the kind of peer support and communication that feels comfortable for you.</p></article>
+  <article class="game-card"><div class="feature-number">LEVEL 02</div><h3>Enter a community</h3><p>Explore spaces for college pressure, confidence, friendships and everyday life.</p></article>
+  <article class="game-card"><div class="feature-number">LEVEL 03</div><h3>Take a breather</h3><p>Pause, use grounding prompts, and give yourself a moment.</p></article>
+ </div>
+</section>
+<footer class="footer">MANTRA · A LITTLE SPACE TO BE HUMAN</footer>
+</div>
+
+<div id="heroIntro" class="screen hidden">
+<header class="topbar"><div class="brand"><svg class="logo" viewBox="0 0 16 16"><use href="#mantra-mark"/></svg>mantra</div><button class="pixel-btn dark" onclick="landing()">← BACK</button></header>
+<main class="world-section">
+ <div class="eyebrow">Character selection · Step 01</div>
+ <h1 class="pixel" style="font-size:clamp(20px,3vw,30px)">SELECT YOUR<br><span class="gradient">SUPERHERO</span></h1>
+ <p class="muted">Choose your character. This is your journey, so start wherever you like.</p>
+ <div class="childhood-tag">UNLEASH YOUR CHILDHOOD AGAIN</div>
+ <h2>Choose your universe</h2>
+ <div id="universeGrid" class="universe-grid"></div>
+ <div id="companionPanel" class="hidden">
+  <h2 id="companionHeading">Choose your companion</h2>
+  <div id="companionGrid" class="companion-grid"></div>
+  <div class="game-card">
+   <div class="field"><label for="heroName">What should your companion call you?</label><input class="game-input" id="heroName" maxlength="30" placeholder="Your name or nickname"></div>
+   <h3>Character themes</h3><p class="muted">Every character has their own colour palette. Pick a character below to apply their theme.</p>
+   <div id="selectionThemes" class="theme-row"></div>
+   <button class="pixel-btn pink" onclick="enterApp()">ENTER MY WORLD →</button>
+  </div>
+ </div>
+</main>
+</div>
+
+<div id="app" class="game-app hidden">
+<aside class="sidebar">
+ <div class="brand"><svg class="logo" viewBox="0 0 16 16"><use href="#mantra-mark"/></svg>mantra</div>
+ <div class="eyebrow" style="margin-top:15px">YOUR GAME MENU</div>
+ <nav class="nav">
+  <button data-page="home" onclick="nav('home')">⌂ My World</button>
+  <button data-page="companion" onclick="nav('companion')">Talk to Companion</button>
+  <button data-page="career" onclick="nav('career')">Career Guidance</button>
+  <button data-page="game" onclick="nav('game')">Play Together</button>
+  <button data-page="match" onclick="nav('match')">Right Match</button>
+  <button data-page="communities" onclick="nav('communities')">Worlds</button>
+  <button data-page="feed" onclick="nav('feed')">Community Feed</button>
+  <button data-page="callie" onclick="nav('callie')">Reflection Space</button>
+  <button data-page="panic" onclick="nav('panic')">Take a Pause</button>
+  <button data-page="moderation" onclick="nav('moderation')">Safety & Reports</button>
+  <button onclick="logout()">← Leave World</button>
+ </nav>
+ <div class="theme-menu-wrap">
+  <button class="theme-menu-button" type="button" aria-expanded="false" aria-controls="themeMenuPanel" onclick="toggleThemeMenu()"><span>🎨 Choose a theme</span><span id="themeMenuChevron">＋</span></button>
+  <div id="themeMenuPanel" class="theme-menu-panel" hidden>
+   <div class="eyebrow">BUILT-IN THEMES</div><div id="sidebarThemes" class="theme-row"></div>
+  </div>
+ </div>
+ <p class="notice" style="margin-top:18px">Every small step counts. Take your time.</p>
+</aside>
+<main class="main">
+ <header class="app-header"><div class="eyebrow">PLAYER WORLD / MANTRA</div><h2 id="pageTitle">My World</h2><div class="muted" id="pageSubtitle">One small step is still progress.</div></header>
+ <div class="content" id="content"></div>
+</main>
+</div>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let name = 'Hero', page = 'home', paused = false, currentTheme = '';
+let companion = {};
+
+const themes = [
+ {name:'Original Purple',bg:'#111027',panel:'#242047',accent:'#8b70f5',soft:'#f4a8e7',text:'#fff9ff'},
+ {name:'Hello Kitty Pink',bg:'#fff2f8',panel:'#ffe0ed',accent:'#ef83b8',soft:'#ffadd4',text:'#46243a'},
+ {name:'Cloud Blue',bg:'#edf6ff',panel:'#d9eaff',accent:'#5e9fe8',soft:'#a7d5ff',text:'#172b45'},
+ {name:'Black & Gold',bg:'#101014',panel:'#222127',accent:'#d4b34f',soft:'#f3d978',text:'#fff9e8'},
+ {name:'Mint Dream',bg:'#effbf5',panel:'#d8f4e6',accent:'#5da987',soft:'#a6e4c8',text:'#17382c'},
+ {name:'Lavender',bg:'#f4f0ff',panel:'#e4dcff',accent:'#8c70d6',soft:'#c7b6ff',text:'#2d2347'}
+];
+
+const universes = {
+ 'Avengers':{symbol:'✦',description:'Marvel-inspired heroes',characters:[
+  ['Spider-Man','Friendly, brave and curious','#d93636','#2364a8','#e8bd98','#17172c','spider'],
+  ['Iron Man','Inventive and determined','#d93636','#d7a82e','#edc09c','#241a2c','iron'],
+  ['Black Widow','Clever and courageous','#171522','#bd3434','#edc09c','#21182c','widow'],
+  ['Captain America','Steady and loyal','#2858a4','#f2f0f8','#e8bd98','#34223a','shield'],
+  ['Thor','Bold and protective','#2460a8','#d7b45d','#edbd9f','#6c3e29','thor'],
+  ['Shuri','Curious and inventive','#29233f','#7654d9','#8b513d','#171522','shuri']
+ ]},
+ 'Barbie':{symbol:'♡',description:'Dream big and be whoever you want',characters:[
+  ['Barbie','Dreamer and friend','#f08acb','#f8d6ed','#f0c39e','#8a4d32','barbie'],
+  ['Princess Barbie','Kind and courageous','#d982d2','#d9b5ff','#f0c39e','#9a633d','princess'],
+  ['Astronaut Barbie','Curious explorer','#4b8ad7','#e9eaf4','#f0c39e','#8a4d32','space'],
+  ['Mermaid Barbie','Ocean dreamer','#49b9cf','#8f70e9','#f0c39e','#b55b83','mermaid'],
+  ['Artist Barbie','Creative spirit','#e6a4df','#e9c1f5','#f0c39e','#8a4d32','artist']
+ ]},
+ 'Sanrio':{symbol:'♡',description:'Sweet and cozy companions',characters:[
+  ['Hello Kitty','Warm and friendly','#f7b9d7','#fff8fc','#f0c39e','#fff8fc','kitty'],
+  ['Kuromi','Playful and bold','#252132','#c9b8ff','#f0c39e','#262033','kuromi'],
+  ['My Melody','Gentle and kind','#f2a9c8','#fff0f5','#f0c39e','#f3a9c9','melody'],
+  ['Cinnamoroll','Dreamy and soft','#8bc8f7','#fff9ff','#f0c39e','#b4d9fa','cinnamoroll'],
+  ['Pompompurin','Cozy and cheerful','#d6b16d','#f7dca0','#f0c39e','#9c733a','pompom'],
+  ['Keroppi','Cheerful explorer','#62c98c','#f4f3c4','#f0c39e','#62c98c','keroppi']
+ ]},
+ 'DC Heroes':{symbol:'⚡',description:'Gotham and beyond',characters:[
+  ['Batman','Quiet, brave and determined','#15151f','#d7c44a','#e8bd98','#1a1a24','batman'],
+  ['Superman','Hopeful and steady','#2464b6','#d83d4d','#e8bd98','#34223a','super'],
+  ['Wonder Woman','Strong and compassionate','#a52c43','#d8b24d','#e8bd98','#3b242e','wonder'],
+  ['Batgirl','Clever and courageous','#252238','#8b70f5','#e8bd98','#21182c','batgirl']
+ ]},
+ 'Disney Princesses':{symbol:'♕',description:'Magic, courage and adventure',characters:[
+  ['Rapunzel','Creative and curious','#d7a45c','#d6a3e8','#f0c39e','#8a4d32','princess'],
+  ['Cinderella','Hopeful and kind','#77b9ec','#e6f4ff','#f0c39e','#9a633d','princess'],
+  ['Moana','Brave explorer','#bc543d','#d3a05b','#9d5e3f','#171522','princess'],
+  ['Belle','Book lover','#d6a82e','#f3c85b','#f0c39e','#6b3d2d','princess'],
+  ['Tiana','Dreamer and doer','#32956d','#c8e7d1','#8a513b','#171522','princess'],
+  ['Mulan','Courageous adventurer','#bd4d5a','#e0c6d6','#edbd9f','#21182c','princess']
+ ]},
+ 'Minecraft':{symbol:'▦',description:'Blocky explorers and builders',characters:[
+  ['Block Builder','Build at your own pace','#5f9c55','#7e9c52','#d5a77d','#593d2e','block'],
+  ['Cave Explorer','Discover new paths','#656a7b','#3c5368','#d5a77d','#342c2a','block'],
+  ['Garden Keeper','Grow something gentle','#62a765','#8cc66d','#d5a77d','#593d2e','block']
+ ]}
+};
+
+const characterThemeOverrides = {
+ 'Hello Kitty':['#fff2f8','#ffe0ed','#ef83b8','#ffadd4','#46243a'],
+ 'Kuromi':['#171320','#2b2038','#bd8bff','#ff9bd7','#fff4ff'],
+ 'My Melody':['#fff1f5','#ffdfeb','#e98cb7','#ffc4df','#542d43'],
+ 'Cinnamoroll':['#eff8ff','#dceeff','#72b8ee','#b5ddff','#203b59'],
+ 'Pompompurin':['#fff7df','#f4e4b7','#c99943','#f4d77d','#49351d'],
+ 'Keroppi':['#effff0','#d7f5dc','#55ad70','#a6e8ad','#20462b'],
+ 'Barbie':['#fff0fa','#ffdaef','#e65caf','#ffa6dc','#532041'],
+ 'Princess Barbie':['#fff0fc','#f2dfff','#c57ce7','#f6b8f0','#46244f'],
+ 'Astronaut Barbie':['#edf5ff','#d8e8ff','#548fe1','#b5d9ff','#203756'],
+ 'Mermaid Barbie':['#e9fcff','#d1f3f6','#38aabf','#c4b3ff','#193e4a'],
+ 'Artist Barbie':['#fff0fc','#f2dfff','#d47bd2','#ffb9e9','#49234a'],
+ 'Batman':['#101014','#25242c','#d4b34f','#f3d978','#fff9e8'],
+ 'Superman':['#101e3c','#1d3765','#377ed0','#e84c60','#f7f7ff'],
+ 'Wonder Woman':['#28111d','#4a1c30','#c94b63','#edcc73','#fff2ed'],
+ 'Spider-Man':['#171323','#2e203c','#e54444','#6fb5ff','#fff5ff'],
+ 'Iron Man':['#1d1115','#392126','#d94747','#edc45a','#fff4e8'],
+ 'Captain America':['#101c35','#1d3154','#4d84dc','#e7e8f8','#f5f6ff'],
+ 'Black Widow':['#171216','#30202a','#b8324a','#f19ab0','#fff3f5'],
+ 'Thor':['#121b2b','#23344c','#578ac6','#e9c96b','#f4f7ff'],
+ 'Rapunzel':['#281b43','#46305e','#b78be8','#f1c3f5','#fff6ff'],
+ 'Cinderella':['#edf6ff','#d8e9ff','#70a9e9','#c4ddff','#233c5d'],
+ 'Moana':['#102c39','#1b4b54','#38a9a1','#ffb68b','#f5fff9'],
+ 'Belle':['#281d16','#4b3524','#d3a32d','#ffe29a','#fff8e9'],
+ 'Tiana':['#112c27','#1d4a3b','#3ca77b','#b5e6c9','#effff6'],
+ 'Mulan':['#301821','#512733','#c34b61','#f2c2cf','#fff4f4'],
+ 'Block Builder':['#17251a','#293e2a','#70b65d','#c3e68a','#f5fff0'],
+ 'Cave Explorer':['#151b27','#293547','#6b8aab','#b9c8dc','#f2f7ff'],
+ 'Garden Keeper':['#142a20','#254733','#65b77a','#c1e8a9','#f2fff0']
+};
+
+function characterFromArray(c) {
+ return {name:c[0],description:c[1],outfit:c[2],detail:c[3],skin:c[4],hair:c[5],kind:c[6]};
+}
+function getCharacterTheme(ch) {
+ const custom=characterThemeOverrides[ch.name];
+ if(custom) return {bg:custom[0],panel:custom[1],accent:custom[2],soft:custom[3],text:custom[4]};
+ return {bg:'#171426',panel:'#292341',accent:ch.outfit||'#8b70f5',soft:ch.detail||'#f4a8e7',text:'#fff9ff'};
+}
+function toast(message) {
+ $('toast').textContent=message;
+ $('toast').classList.remove('hidden');
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),2800);
+}
+function hideScreens() {
+ ['landing','heroIntro','app'].forEach(id=>$(id).classList.add('hidden'));
+}
+function start() {
+ hideScreens();$('heroIntro').classList.remove('hidden');
+ renderUniverses();renderThemeButtons('selectionThemes');
+}
+function landing() { hideScreens();$('landing').classList.remove('hidden'); }
+function logout() {
+ if('speechSynthesis' in window) speechSynthesis.cancel();
+ hideScreens();$('landing').classList.remove('hidden');
+}
+function enterApp() {
+ name=$('heroName').value.trim()||'Hero';
+ hideScreens();$('app').classList.remove('hidden');
+ renderThemeButtons('sidebarThemes');nav('home');window.scrollTo(0,0);
+}
+function renderUniverses() {
+ $('universeGrid').innerHTML=Object.entries(universes).map(([key,u])=>`
+  <button class="universe-choice" id="u-${esc(key).replace(/[^a-z0-9]/gi,'')}" onclick="chooseUniverse('${esc(key)}')">
+   <span class="pixel" style="font-size:20px">${u.symbol}</span><strong>${esc(key)}</strong><small>${esc(u.description)}</small>
+  </button>`).join('');
+}
+function chooseUniverse(key) {
+ const u=universes[key];if(!u)return;
+ document.querySelectorAll('.universe-choice').forEach(b=>b.classList.remove('selected'));
+ $('u-'+key.replace(/[^a-z0-9]/gi,'')).classList.add('selected');
+ $('companionPanel').classList.remove('hidden');
+ $('companionHeading').textContent='Choose your '+key+' companion';
+ $('companionGrid').innerHTML=u.characters.map((c,i)=>{
+  const ch=characterFromArray(c);
+  return `<button class="companion-choice" id="pick-${i}" onclick="chooseCompanion('${esc(key)}',${i})">
+   ${legoFigure(ch)}<strong>${esc(ch.name)}</strong><small>${esc(ch.description)}</small>
+  </button>`;
+ }).join('');
+ chooseCompanion(key,0);
+ $('companionPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function chooseCompanion(key,i) {
+ const c=universes[key]?.characters[i];if(!c)return;
+ companion={...characterFromArray(c),universe:key};
+ document.querySelectorAll('.companion-choice').forEach((b,j)=>b.classList.toggle('selected',j===i));
+ applyCharacterTheme(companion);
+ toast(companion.name+' selected!');
+}
+function legoFigure(c) {
+ const k=c.kind||'';
+ return `<div class="lego-figure ${esc(k)}" role="img" aria-label="${esc(c.name)} toy-style minifigure" style="--skin:${c.skin||'#f0c39e'};--hair:${c.hair||'#252039'};--outfit:${c.outfit||'#8b70f5'};--detail:${c.detail||'#f4a8e7'}">
+  <div class="lego-cape"></div><div class="lego-accessory"></div><div class="lego-hair"></div>
+  <div class="lego-head"></div><div class="lego-face"></div><div class="lego-neck"></div>
+  <div class="lego-body"></div><div class="lego-arm"></div><div class="lego-arm right"></div>
+  <div class="lego-leg"></div><div class="lego-leg right"></div>
+ </div>`;
+}
+function toggleThemeMenu(force) {
+ const panel=$('themeMenuPanel'),button=document.querySelector('.theme-menu-button');
+ if(!panel||!button)return;
+ const open=typeof force==='boolean'?force:panel.hidden;
+ panel.hidden=!open;button.setAttribute('aria-expanded',String(open));
+ if($('themeMenuChevron'))$('themeMenuChevron').textContent=open?'−':'＋';
+}
+function applyTheme(themeName) {
+ const t=themes.find(x=>x.name===themeName);if(!t)return;
+ setThemeVariables(t);currentTheme=t.name;
+ renderThemeButtons('selectionThemes');renderThemeButtons('sidebarThemes');
+ toggleThemeMenu(false);
+}
+function setThemeVariables(t) {
+ const r=document.documentElement;
+ r.style.setProperty('--bg',t.bg);r.style.setProperty('--panel',t.panel);
+ r.style.setProperty('--accent',t.accent);r.style.setProperty('--soft',t.soft);
+ r.style.setProperty('--fg',t.text);r.style.setProperty('--muted',contrastMuted(t.text));
+}
+function contrastMuted(text) {
+ return text==='#fff9ff'||text==='#fff4ff'||text==='#fff5ff'?'#c9c3dc':'#655b75';
+}
+function applyCharacterTheme(ch) {
+ const t=getCharacterTheme(ch);
+ setThemeVariables(t);currentTheme=ch.name;
+ renderThemeButtons('selectionThemes');renderThemeButtons('sidebarThemes');
+}
+function renderThemeButtons(id) {
+ const el=$(id);if(!el)return;
+ const builtIn=themes.map(t=>`
+  <button class="theme-swatch ${currentTheme===t.name?'active':''}" onclick="applyTheme('${t.name}')">
+   <span class="theme-dot" style="--swatch:${t.accent}"></span>${esc(t.name)}
+  </button>`).join('');
+ const custom=Object.entries(universes).map(([universe,data])=>`
+  <div class="theme-group">${esc(universe)} themes</div>
+  ${data.characters.map((c,i)=>{
+   const ch=characterFromArray(c),t=getCharacterTheme(ch);
+   return `<button class="theme-swatch ${currentTheme===ch.name?'active':''}" onclick="selectCharacterTheme('${esc(universe)}',${i})">
+    <span class="theme-dot" style="--swatch:${t.accent}"></span>${esc(ch.name)}
+   </button>`;
+  }).join('')}`).join('');
+ el.innerHTML=builtIn+custom;
+}
+function selectCharacterTheme(universe,index) {
+ const data=universes[universe]?.characters[index];if(!data)return;
+ const ch={...characterFromArray(data),universe};
+ applyCharacterTheme(ch);toggleThemeMenu(false);toast(ch.name+' theme applied!');
+}
+
+const pages={
+ home:['My World','Your pace. Your path.'],
+ companion:['Talk to Your Companion','Your chosen companion is here to listen.'],
+ career:['Career Guidance','Explore options and build a realistic, step-by-step roadmap.'],
+ game:['Companion Quest','Play a tiny story adventure together.'],
+ match:['Right Match','Discover the kind of connection that feels right.'],
+ communities:['Choose a World','Explore supportive topic-based spaces.'],
+ feed:['Community Feed','Share a thought or a little encouragement.'],
+ callie:['Reflection Space','Pause and explore what is on your mind.'],
+ panic:['Take a Pause','You do not have to solve everything right now.'],
+ moderation:['Safety & Reports','Review reports and manage demo moderation actions.']
+};
+function nav(p) {
+ page=p;
+ document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===p));
+ $('pageTitle').textContent=pages[p][0];$('pageSubtitle').textContent=pages[p][1];
+ render(p);
+}
+function render(p) {
+ const c=$('content');
+ ({home:renderHome,companion:renderCompanion,career:renderCareer,game:renderGame,match:renderMatch,communities:renderCommunities,feed:renderFeed,callie:renderCallie,panic:renderPanic,moderation:renderModeration}[p]||renderHome)(c);
+}
+function renderHome(c) {
+ c.innerHTML=`<section class="welcome"><div class="eyebrow">PLAYER ${esc(name).toUpperCase()}</div>
+  <h2>Your world is yours to build.</h2><p class="muted">Your companion ${esc(companion.name)} is here to listen while you explore, reflect, or take a breath.</p>
+  <button class="pixel-btn pink" onclick="nav('companion')">TALK TO MY COMPANION →</button></section>
+  <div class="lego-guide">${legoFigure(companion)}<div><div class="eyebrow">YOUR IN-WORLD GUIDE</div>
+  <h3>${esc(companion.name)} is here, ${esc(name)}.</h3><p class="muted">${esc(companion.description)} I'll guide you through your world and listen when you want to talk.</p>
+  <button class="pixel-btn pink" onclick="nav('companion')">TALK TO ${esc(companion.name.toUpperCase())} →</button></div></div>
+  <div class="feature-grid">
+   <article class="game-card"><div class="feature-number">COMPANION GAME</div><h3>Play Together</h3><p>Go on a tiny adventure with ${esc(companion.name)} and collect calm stars.</p><button class="pixel-btn pink" onclick="nav('game')">PLAY TOGETHER</button></article>
+   <article class="game-card"><div class="feature-number">CAREER QUEST</div><h3>Build your roadmap</h3><p>Turn a goal into a realistic plan with milestones, skills, projects and next steps.</p><button class="pixel-btn pink" onclick="nav('career')">EXPLORE CAREER PATHS</button></article>
+   <article class="game-card"><div class="feature-number">QUEST 01</div><h3>Meet your match</h3><p>Explore your preferred support style.</p><button class="pixel-btn dark" onclick="nav('match')">START QUEST</button></article>
+   <article class="game-card"><div class="feature-number">QUEST 02</div><h3>Explore new worlds</h3><p>Find spaces built around shared experiences.</p><button class="pixel-btn dark" onclick="nav('communities')">EXPLORE WORLDS</button></article>
+   <article class="game-card"><div class="feature-number">QUEST 03</div><h3>Take a pause</h3><p>Try a gentle grounding exercise.</p><button class="pixel-btn dark" onclick="nav('panic')">TAKE A BREAK</button></article>
+  </div>`;
+}
+
+const questions=[
+ ['What kind of support do you want?',['Someone who listens','Practical ideas','Encouragement','I am not sure']],
+ ['What makes a conversation safe?',['Gentle and patient replies','Kind honesty','Light chat first','I set the pace']],
+ ['How do you like to communicate?',['Short messages','Long conversations','A mix','Mostly reading']],
+ ['What is on your mind lately?',['College or work','Friendships','Confidence','Stress or loneliness','Prefer not to say']],
+ ['What energy feels right?',['Calm and quiet','Warm and encouraging','Funny and light','Thoughtful']],
+ ['How often do you want to check in?',['Most days','A few times a week','When I feel like it','Not sure']],
+ ['What matters most in a match?',['Similar experiences','Similar communication','Respect for boundaries','Different perspective']]
+];
+function renderMatch(c) {
+ c.innerHTML=`<div class="game-card"><div class="eyebrow">PLAYER QUEST / 01</div><h3>Find your Right Match</h3>
+ <p class="muted">This demo suggests a support style; it does not connect you to a real person.</p>
+ ${questions.map((q,i)=>`<div class="field"><label>${i+1}. ${esc(q[0])}</label>${q[1].map((a,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}" ${j===0?'checked':''}>${esc(a)}</label>`).join('')}</div>`).join('')}
+ <button class="pixel-btn pink" onclick="matchResult()">REVEAL MY MATCH →</button><div id="result"></div></div>`;
+}
+function matchResult() {
+ let sum=0;questions.forEach((q,i)=>sum+=Number(document.querySelector(`input[name="q${i}"]:checked`)?.value||0));
+ const results=[
+  ['The Gentle Listener','A steady presence who gives you space to speak and listens with care.'],
+  ['The Encouraging Ally','Someone who helps you notice your progress.'],
+  ['The Thoughtful Companion','A reflective connection that respects your pace.'],
+  ['The Easygoing Friend','A relaxed, warm connection for difficult days.']
+ ];
+ const r=results[sum%results.length];
+ $('result').innerHTML=`<div class="result"><div class="eyebrow">MATCH STYLE UNLOCKED</div><h3>${r[0]}</h3><p>${r[1]}</p><p class="muted">This is a playful preference result, not a clinical assessment or a real human match.</p><button class="pixel-btn dark" onclick="nav('communities')">EXPLORE WORLDS →</button></div>`;
+}
+
+const worlds=[
+ ['College Pressure','Study stress, deadlines and finding balance.'],
+ ['Confidence & Self-Worth','Practice being kinder to yourself.'],
+ ['Friendships & Belonging','Navigate relationships and feeling included.'],
+ ['Small Wins Club','Celebrate tiny steps and everyday progress.'],
+ ['Life Changes','A gentle space for uncertainty and new chapters.'],
+ ['Quiet Corner','No pressure to share more than you want.']
+];
+function renderCommunities(c) {
+ c.innerHTML=`<div class="lego-guide">${legoFigure(companion)}<div><div class="eyebrow">YOUR GUIDE · ${esc(companion.name.toUpperCase())}</div><h3>Let's choose a safe space together.</h3><p class="muted">${esc(companion.name)} will stay with you while you complete the community safety test.</p></div></div>
+ <div class="eyebrow">SELECT YOUR DESTINATION</div><p class="muted">Each world has a short entry test about empathy, boundaries, privacy and respectful behaviour.</p>
+ <div class="feature-grid">${worlds.map((w,i)=>`<article class="game-card"><div class="feature-number">WORLD 0${i+1}</div><h3>${esc(w[0])}</h3><p>${esc(w[1])}</p><button class="pixel-btn dark" onclick="openRoom(${i})">TAKE ENTRY TEST →</button></article>`).join('')}</div>
+ <div id="room"></div><p class="notice">This prototype stores test results locally. Real access control requires a server-side check.</p>`;
+}
+function openRoom(i) {
+ $('room').innerHTML=`<div class="entry-test"><div class="eyebrow">COMMUNITY ENTRY TEST</div><h3>${esc(worlds[i][0])}</h3>
+ <p class="muted">Answer in your own words. A browser cannot reliably detect AI-written text. This demo uses a self-confirmation and basic answer checks instead.</p>
+ <form id="entryForm" onsubmit="event.preventDefault();submitEntryTest(${i})">
+ <div class="field"><label for="entry1">1. Someone shares something personal. How would you respond respectfully?</label><textarea class="game-input" id="entry1" minlength="35" maxlength="500" required rows="3" placeholder="Describe what you would actually say or do..."></textarea></div>
+ <div class="field"><label for="entry2">2. Someone asks you to keep a serious safety concern secret. What would you do?</label><textarea class="game-input" id="entry2" minlength="35" maxlength="500" required rows="3" placeholder="Describe how you would balance privacy and safety..."></textarea></div>
+ <div class="field"><label for="entry3">3. A member disagrees with you or asks you to stop messaging them. What do you do?</label><textarea class="game-input" id="entry3" minlength="35" maxlength="500" required rows="3" placeholder="Describe how you would respect their boundary..."></textarea></div>
+ <label class="option"><input type="checkbox" id="entryOwn" required>I wrote these answers myself, without AI or another person writing them for me.</label>
+ <label class="option"><input type="checkbox" id="entryRules" required>I agree not to harass, threaten, pressure, expose private information, or repeatedly contact someone who says no.</label>
+ <button class="pixel-btn pink">SUBMIT ENTRY TEST →</button></form><div id="entryResult"></div></div>`;
+ $('entryForm').querySelectorAll('textarea').forEach(el=>el.addEventListener('paste',e=>{e.preventDefault();el.dataset.pasteBlocked='true';toast('Pasting is blocked in this demo. Type your own response.');}));
+ $('room').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function submitEntryTest(i) {
+ const fields=[$('entry1'),$('entry2'),$('entry3')],answers=fields.map(f=>f.value.trim()),result=$('entryResult');
+ if(fields.some(f=>f.dataset.pasteBlocked==='true')) {
+  result.innerHTML='<div class="result"><h3>Answers need to be typed</h3><p>Clear the pasted response and write your own answer.</p></div>';return;
+ }
+ const generic=/^(i would be respectful|i would help|i would be nice|i agree|i don't know|i would listen)[.! ]*$/i;
+ const repetitive=answers.some(s=>{
+  const words=s.toLowerCase().replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(Boolean);
+  return words.length<7||new Set(words).size<Math.min(5,words.length*.45);
+ });
+ if(answers.some(s=>s.length<35||generic.test(s))||new Set(answers.map(s=>s.toLowerCase())).size<3||repetitive) {
+  result.innerHTML='<div class="result"><h3>Not ready to submit yet</h3><p>Add specific, personal explanations in your own words. Very short, generic or repeated answers cannot pass this demo check.</p></div>';return;
+ }
+ let passes=[];try{passes=JSON.parse(localStorage.getItem('mantraEntryPasses')||'[]')}catch(e){}
+ const key=(name+'::'+worlds[i][0]).toLowerCase();if(!passes.includes(key))passes.push(key);
+ try{localStorage.setItem('mantraEntryPasses',JSON.stringify(passes))}catch(e){}
+ result.innerHTML=`<div class="result"><span class="status-pill">ENTRY TEST COMPLETED</span><h3>Thanks for taking safety seriously.</h3><p>You can continue to <b>${esc(worlds[i][0])}</b> in this demo. ${esc(companion.name)} will stay with you.</p>
+ <div class="lego-guide">${legoFigure(companion)}<div><b>${esc(companion.name)} says:</b><p>Being kind also means respecting boundaries. You don't have to fix someone's problem to treat them with care.</p></div></div>
+ <button class="pixel-btn pink" onclick="nav('feed')">CONTINUE TO COMMUNITY BOARD →</button>
+ <p class="notice">This is a local demo gate, not a verified AI detector or secure identity check.</p></div>`;
+}
+
+function getPosts(){try{return JSON.parse(localStorage.getItem('mantraDemoPosts')||'[]')}catch(e){return []}}
+function savePosts(p){try{localStorage.setItem('mantraDemoPosts',JSON.stringify(p));return true}catch(e){toast('Browser storage is unavailable.');return false}}
+function getReports(){try{return JSON.parse(localStorage.getItem('mantraDemoReports')||'[]')}catch(e){return []}}
+function renderFeed(c) {
+ const posts=getPosts();
+ c.innerHTML=`<div class="game-card"><div class="eyebrow">COMMUNITY BOARD</div><h3>Leave a little encouragement.</h3><p class="muted">Share a small win or thought. Avoid posting private information.</p>
+ <div class="field"><label for="postText">Your message</label><textarea class="game-input" id="postText" maxlength="500" rows="4" placeholder="One thing I want to share today..."></textarea></div>
+ <button class="pixel-btn pink" onclick="addPost()">POST TO MY BOARD →</button><p class="notice">Local demo only. Posts are visible only in this browser.</p></div>
+ <div id="posts">${posts.length?posts.map(postCard).join(''):'<div class="game-card"><h3>The board is quiet.</h3><p class="muted">No posts yet. You can start with a kind thought.</p></div>'}</div>`;
+}
+function addPost() {
+ const text=$('postText').value.trim();if(!text)return toast('Write something before posting.');
+ const posts=getPosts();posts.unshift({id:Date.now(),name,text,likes:0});
+ if(savePosts(posts)){renderFeed($('content'));toast('Post added to this browser.');}
+}
+function postCard(p) {
+ return `<article class="post"><div class="eyebrow">PLAYER / ${esc(p.name)}</div><p>${esc(p.text)}</p>
+ <button class="pixel-btn dark" onclick="likePost(${Number(p.id)})">SUPPORT ${Number(p.likes)||0}</button>
+ <button class="pixel-btn dark" onclick="reportPost(${Number(p.id)})">REPORT</button></article>`;
+}
+function likePost(id) {
+ if(savePosts(getPosts().map(p=>p.id===id?{...p,likes:(Number(p.likes)||0)+1}:p)))renderFeed($('content'));
+}
+function reportPost(id) {
+ const p=getPosts().find(x=>Number(x.id)===Number(id));if(!p)return;
+ const reason=prompt('Report reason: harassment, threats, spam, privacy violation, or other. Add a short note:');
+ if(!reason)return;
+ const reports=getReports();
+ reports.unshift({id:Date.now(),postId:Number(id),author:p.name,text:p.text,reason:reason.slice(0,300),status:'Open'});
+ try{localStorage.setItem('mantraDemoReports',JSON.stringify(reports));toast('Report saved for review in this demo.')}catch(e){toast('Could not save report.')}
+}
+
+function renderModeration(c) {
+ const reports=getReports();let suspended={};
+ try{suspended=JSON.parse(localStorage.getItem('mantraDemoSuspensions')||'{}')}catch(e){}
+ c.innerHTML=`<div class="game-card"><div class="eyebrow">COMMUNITY SAFETY</div><h3>Review reports and manage behaviour</h3>
+ <p class="muted">Demo moderation tools. These actions affect this browser only. A real website must enforce suspensions on its server and restrict this panel to authorised moderators.</p>
+ <p class="notice">Review context before taking action. Reports can cover harassment, threats, scams, repeated unwanted contact, or private information.</p></div>
+ <div class="game-card"><h3>Suspension lookup</h3><div class="field"><label for="moderatorUser">Member display name</label><input id="moderatorUser" class="game-input" placeholder="Exact display name"></div>
+ <button class="pixel-btn pink" onclick="suspendMember()">SUSPEND FOR 7 DAYS</button> <button class="pixel-btn dark" onclick="checkSuspension()">CHECK SUSPENSION</button><div id="moderationStatus" class="muted" aria-live="polite"></div></div>
+ <div class="game-card"><h3>Reports (${reports.filter(r=>r.status==='Open').length} open)</h3>
+ ${reports.length?reports.map(r=>`<div class="moderation-row"><span class="status-pill">${esc(r.status)}</span><p><b>Reported member:</b> ${esc(r.author)}</p><p><b>Post:</b> ${esc(r.text)}</p><p><b>Reason:</b> ${esc(r.reason)}</p>
+ <button class="pixel-btn dark" onclick="removeReportedPost(${Number(r.postId)},${Number(r.id)})">REMOVE POST + CLOSE REPORT</button>
+ <button class="pixel-btn dark" onclick="suspendReportedMember(${JSON.stringify(r.author)},${Number(r.id)})">SUSPEND AUTHOR 7 DAYS</button>
+ <button class="pixel-btn dark" onclick="closeReport(${Number(r.id)})">DISMISS REPORT</button></div>`).join(''):'<p class="muted">No reports yet. Report a post from the Community Feed.</p>'}</div>
+ <div class="game-card"><h3>Current demo suspensions</h3>${Object.entries(suspended).length?Object.entries(suspended).map(([n,t])=>`<p>${esc(n)} — ${new Date(t).getTime()>Date.now()?'Suspended until '+new Date(t).toLocaleString():'Suspension expired'}</p>`).join(''):'<p class="muted">No suspended members.</p>'}</div>`;
+}
+function closeReport(id) {
+ const reports=getReports().map(r=>r.id===id?{...r,status:'Closed'}:r);
+ localStorage.setItem('mantraDemoReports',JSON.stringify(reports));renderModeration($('content'));toast('Report closed.');
+}
+function removeReportedPost(pid,rid) {
+ if(!confirm('Remove this post from the local demo board?'))return;
+ savePosts(getPosts().filter(p=>Number(p.id)!==Number(pid)));closeReport(rid);
+}
+function suspendMember() {
+ const n=$('moderatorUser').value.trim();if(!n)return toast('Enter a member name.');
+ applySuspension(n,null);
+}
+function suspendReportedMember(n,id) {
+ if(!confirm('Suspend '+n+' from this demo for seven days?'))return;
+ applySuspension(n,id);
+}
+function applySuspension(n,id) {
+ let d={};try{d=JSON.parse(localStorage.getItem('mantraDemoSuspensions')||'{}')}catch(e){}
+ d[n.toLowerCase()]=new Date(Date.now()+7*24*60*60*1000).toISOString();
+ try{localStorage.setItem('mantraDemoSuspensions',JSON.stringify(d))}catch(e){return toast('Could not save suspension.')}
+ if(id)closeReport(id);
+ else{$('moderationStatus').textContent=n+' has a seven-day demo suspension.';toast('Seven-day demo suspension recorded.')}
+}
+function checkSuspension() {
+ const n=$('moderatorUser').value.trim().toLowerCase();let d={};
+ try{d=JSON.parse(localStorage.getItem('mantraDemoSuspensions')||'{}')}catch(e){}
+ const t=d[n];
+ $('moderationStatus').textContent=!t?'No suspension record found.':new Date(t).getTime()>Date.now()?'Suspended until '+new Date(t).toLocaleString():'Suspension has expired.';
+}
+
+
+const companionGameScenes = [
+ {title:'The Cloud Bridge',story:'A little bridge of clouds blocks the path. Your companion looks at you and asks what you should do together.',choices:[['Build it one small step at a time','You place one cloud block, then another. The bridge grows steadily. Your companion cheers your patience.'],['Ask a friendly bird for help','A tiny bird brings a ribbon of starlight. You learn that asking for help can be brave.'],['Take a pause and look around','You sit together and notice the sky changing colour. When you are ready, the next step feels easier.']]},
+ {title:'The Quiet Forest',story:'The forest is full of glowing plants, but the path feels unfamiliar. Your companion stays beside you.',choices:[['Follow the glowing flowers','The flowers light a gentle path. You discover a little pond filled with floating stars.'],['Make a map together','You draw a map and mark what you know. The forest feels less confusing when you break it into pieces.'],['Choose the coziest resting spot','You find a mossy nook, rest, and listen to the leaves. Rest is part of the adventure too.']]},
+ {title:'The Star Garden',story:'A garden has lost its sparkle. It needs one kind action to begin glowing again.',choices:[['Water one tiny plant','A single plant blooms. Soon the garden has a little patch of colour. Small care adds up.'],['Leave a kind note','Your note gives the garden keeper hope. Kindness can change the feeling of a place.'],['Invite your companion to help','You work side by side and the stars return one by one. You did not have to do it alone.']]}
+];
+let companionGameIndex=0, companionGameStars=0;
+let balloonPopped = [];
+const balloonMessages = [
+ {label:'Release',color:'#f59bbE',message:'You do not have to solve everything right now. What is one thing you can set down for a moment?'},
+ {label:'Breathe',color:'#91bdeB',message:'Relax your shoulders. Breathe in gently, then breathe out slowly. There is no need to rush.'},
+ {label:'Remember',color:'#c3a1f7',message:'You have made it through difficult moments before. Take this moment one step at a time.'},
+ {label:'Reflect',color:'#f4d58d',message:'What is testing your patience right now? Is there one small thing within your control?'},
+ {label:'Kindness',color:'#9ddac0',message:'You are allowed to be a work in progress. Being patient with yourself counts, too.'},
+ {label:'Hope',color:'#f6b5a5',message:'You do not need to feel okay instantly. Give yourself permission to begin where you are.'}
+];
+const wellnessGames = [
+ {id:'patience',name:'Patience Garden',tag:'PATIENCE · SLOW DOWN',desc:'Grow a tiny garden one gentle choice at a time.',intro:'Nothing here grows faster when you force it. Choose a small caring action for your seed.',actions:[['Give it water','A little care is still progress. Waiting does not mean nothing is happening.'],['Clear one stone','You cannot do everything at once. You can make one small thing easier.'],['Sit beside it','Rest is allowed. You do not have to earn every pause.']],finish:'What situation has been testing your patience? What is one part you can influence today?'},
+ {id:'anxiety',name:'Cloud Sorter',tag:'ANXIETY · UNCLUTTER THOUGHTS',desc:'Sort floating thoughts into what you can act on and what can wait.',intro:'Pick a cloud to reveal a thought prompt. You can choose an option that feels useful; there are no wrong answers.',actions:[['Something I can do today','Choose one tiny next step. It can be so small it takes two minutes.'],['Something I cannot solve right now','You can set this thought down for now and return to it later if needed.'],['A thought asking for certainty','You do not need every answer before taking one gentle step.']],finish:'Would you like to tell your companion which thought keeps coming back?'},
+ {id:'panic',name:'Grounding Explorer',tag:'PANIC · FIND THE PRESENT',desc:'A calm sensory scavenger hunt to reconnect with the room around you.',intro:'Look around only if it feels comfortable. Tick off what you notice. You can skip anything that does not help.',actions:[['Notice 5 things you can see','Name colours, shapes or ordinary objects around you.'],['Notice 4 things you can feel','Perhaps your feet on the floor or fabric against your hand. No need to change your breathing.'],['Notice 3 things you can hear','Listen for nearby or distant sounds, without judging them.'],['Notice 2 things you can smell','If you cannot smell anything, simply skip this step.'],['Notice 1 thing that reminds you you are here','Choose an ordinary detail in the present moment.']],finish:'You did not have to do this perfectly. Would you like to tell your companion what you noticed or what you need right now?'},
+ {id:'sadness',name:'Comfort Room',tag:'SADNESS · GENTLE COMPANY',desc:'Build a little refuge by choosing the kind of comfort you want.',intro:'You do not have to explain your feelings to play. Choose what would feel most supportive right now.',actions:[['A soft blanket and quiet','You are allowed to take a pause without having to justify it.'],['A kind note to myself','Try: “This is hard, and I deserve kindness while I go through it.”'],['A friendly presence','You do not have to find the perfect words to ask someone safe to sit with you.']],finish:'What kind of support would feel best right now: being heard, reassurance, distraction, or help with one next step?'},
+ {id:'anger',name:'Meteor Mender',tag:'ANGER · RELEASE SAFELY',desc:'Tap glowing meteors to turn a storm into little sparks.',intro:'Tap the meteors as they appear. This is a playful distraction, not a test of how calm you are.',actions:[['Tap a meteor','Pause for a moment before deciding what to do next.'],['Tap another meteor','Your feelings can be real without needing to act on them immediately.'],['Gather the sparks','If possible, give yourself a little space before responding to what upset you.']],finish:'What happened just before the frustration showed up? You can share as much or as little as you like.'},
+ {id:'focus',name:'Tiny Step Trail',tag:'OVERWHELM · ONE THING AT A TIME',desc:'Cross stepping stones by choosing tiny doable actions.',intro:'Pick the smallest step that feels possible. You can change your mind or stop at any time.',actions:[['Open the task','Starting can be the whole step. You do not need to finish it now.'],['Work for two minutes','A short start counts; you can stop when the timer in your head says enough.'],['Ask for help or a break','Support and rest are valid parts of making progress.']],finish:'What feels biggest right now? Let us break it into a first step that is small enough to begin.'}
+];
+let activeWellnessGame='patience', wellnessChosen=[];
+let mantraCheckin={feeling:'unsure',energy:'low',need:'comfort',note:''};
+function renderGame(c) {
+ $('pageTitle').textContent='Your Mantra Journey'; $('pageSubtitle').textContent='A little world for how today feels — no pressure to feel better instantly.';
+ c.innerHTML=`<div class="game-card"><div class="eyebrow">MANTRA · YOUR EMOTIONAL QUEST</div><h2>First, where are you right now?</h2><p class="muted">Choose what fits best, or choose “I don't know.” This is not a diagnosis. You can skip any question.</p>
+ <div class="field"><label for="mantraFeeling">What feels closest to your experience?</label><select id="mantraFeeling" class="game-input" onchange="mantraCheckin.feeling=this.value"><option value="unsure">I don't know / a mix of feelings</option><option value="sadness">Sad, empty or low</option><option value="anxiety">Anxious or stuck in my thoughts</option><option value="panic">Overwhelmed or intensely distressed</option><option value="lonely">Lonely or disconnected</option><option value="anger">Frustrated or angry</option><option value="focus">Overwhelmed by tasks or pressure</option><option value="patience">Impatient or discouraged</option></select></div>
+ <div class="field"><label for="mantraEnergy">How much energy do you have?</label><select id="mantraEnergy" class="game-input" onchange="mantraCheckin.energy=this.value"><option value="low">Very little — keep it easy</option><option value="medium">Some energy</option><option value="high">I want something active</option></select></div>
+ <div class="field"><label for="mantraNeed">What would help most right now?</label><select id="mantraNeed" class="game-input" onchange="mantraCheckin.need=this.value"><option value="comfort">Comfort and kindness</option><option value="distraction">A playful distraction</option><option value="understand">Understand what I'm feeling</option><option value="action">Find one small next step</option><option value="connection">Feel less alone</option></select></div>
+ <div class="field"><label for="mantraNote">Anything you want Mantra to know? (optional)</label><textarea id="mantraNote" class="game-input" rows="3" maxlength="600" placeholder="You can write a sentence, a few words, or leave this blank."></textarea></div>
+ <button class="pixel-btn pink" onclick="startMantraJourney()">FIND MY WORLD →</button><div id="mantraRecommendation" aria-live="polite"></div><hr style="margin:24px 0;border-color:var(--border)"><h3>Or choose your own world</h3><div class="feature-grid">${wellnessGames.map(g=>`<button class="game-card" style="text-align:left;cursor:pointer;color:var(--fg)" onclick="openWellnessGame('${g.id}')"><div class="feature-number">${esc(g.tag)}</div><h3>${esc(g.name)}</h3><p class="muted">${esc(g.desc)}</p><span class="pixel-btn dark" style="display:inline-block;margin-top:8px">ENTER WORLD →</span></button>`).join('')}<button class="game-card" style="text-align:left;cursor:pointer;color:var(--fg)" onclick="renderStoryQuest()"><div class="feature-number">CO-OP ADVENTURE</div><h3>Story Quest</h3><p class="muted">Explore a little story with your companion.</p></button></div><div id="miniGameStage"></div><p class="muted">Mantra offers general wellbeing support, not diagnosis or treatment. You can stop or switch worlds at any time.</p></div>`;
+}
+function startMantraJourney(){
+ mantraCheckin.feeling=$('mantraFeeling')?.value||'unsure';mantraCheckin.energy=$('mantraEnergy')?.value||'low';mantraCheckin.need=$('mantraNeed')?.value||'comfort';mantraCheckin.note=$('mantraNote')?.value?.trim()||'';
+ let id=mantraCheckin.feeling;
+ if(id==='unsure') id=mantraCheckin.need==='connection'?'sadness':mantraCheckin.need==='action'?'focus':mantraCheckin.need==='distraction'?'anger':'sadness';
+ if(mantraCheckin.need==='comfort'&&['unsure','sadness','lonely'].includes(id))id='sadness';
+ if(mantraCheckin.need==='action')id='focus';if(mantraCheckin.need==='connection')id='sadness';
+ const g=wellnessGames.find(x=>x.id===id)||wellnessGames[0];
+ const rec=$('mantraRecommendation');if(rec)rec.innerHTML=`<div class="result"><h3>Your suggested world: ${esc(g.name)}</h3><p>${esc(g.desc)} Your choices are suggestions, not a label. You can choose another world instead.</p><button class="pixel-btn pink" onclick="openWellnessGame('${g.id}')">ENTER MY WORLD →</button></div>`;
+ window.mantraJourneyContext={feeling:mantraCheckin.feeling,energy:mantraCheckin.energy,need:mantraCheckin.need,note:mantraCheckin.note};
+}
+
+let wellnessMode='adventure';
+function openWellnessGame(id){
+ activeWellnessGame=id;wellnessChosen=[];const g=wellnessGames.find(x=>x.id===id);const stage=$('miniGameStage');if(!stage||!g)return;
+ const isCloud=id==='anxiety';
+ stage.innerHTML=`<section class="pixel-world" style="margin-top:18px;padding:22px;min-height:260px;text-align:center;background:radial-gradient(circle at top,#514078,#211936 75%);border-radius:22px;">
+ <div class="eyebrow" style="color:#f4dfff">${esc(g.tag)}</div><h2 style="color:white">${esc(g.name)}</h2>
+ <div class="companion-game-top"><div class="avatar">${typeof legoFigure==='function'?legoFigure(companion):'★'}</div><div><strong style="color:#fff">${esc(companion.name)}, your teammate</strong><p style="color:#e5d9f4;margin:5px 0 0">“We can play, pause, or change the plan. I'm staying with you.”</p></div></div>
+ <p style="color:#e5d9f4">${esc(g.intro)}</p>
+ <h3 style="color:#fff;margin-top:20px">Choose your play style</h3><p style="color:#e5d9f4">Two ways to explore this world. You can switch any time.</p>
+ <div class="feature-grid" style="margin:14px 0"><button class="game-card mode-choice" style="color:var(--fg);cursor:pointer" onclick="setWellnessMode('cozy')"><div style="font-size:34px">☁</div><h3>Cozy Mode</h3><p class="muted">Gentle, slower, low-energy play. Pop clouds and collect comfort stars.</p></button><button class="game-card mode-choice" style="color:var(--fg);cursor:pointer" onclick="setWellnessMode('adventure')"><div style="font-size:34px">✦</div><h3>Adventure Mode</h3><p class="muted">Move through mini challenges, make choices, and earn little stars.</p></button></div>
+ <div id="wellnessModeStage"></div></section><div id="wellnessMessages" aria-live="polite"></div>
+ <div class="result" id="wellnessFinish" style="display:none"><h3>Quest complete — take your time</h3><p>${esc(g.finish)}</p><div class="field"><label for="wellnessReflection">What did you notice about yourself? (optional)</label><textarea id="wellnessReflection" class="game-input" rows="3" maxlength="600" placeholder="I noticed… / I still feel… / I'm not sure yet…"></textarea></div><div class="field"><label for="wellnessAfter">How do you feel compared with when you started?</label><select id="wellnessAfter" class="game-input"><option value="not sure">I'm not sure yet</option><option value="same">About the same</option><option value="a little lighter">A little lighter</option><option value="more unsettled">More unsettled</option></select></div><div class="field"><label for="wellnessNext">Pick your next step</label><select id="wellnessNext" class="game-input"><option>Rest without pressure</option><option>Drink water or get comfortable</option><option>Message someone I trust</option><option>Try another game for distraction</option><option>Do one tiny task for two minutes</option><option>Talk to my companion</option><option>I don't need to do anything right now</option></select></div><button class="pixel-btn pink" onclick="talkAboutWellnessGame()">REFLECT WITH MY COMPANION →</button> <button class="pixel-btn dark" onclick="openWellnessGame('${id}')">PLAY AGAIN</button> <button class="pixel-btn dark" onclick="nav('game')">CHOOSE ANOTHER WORLD</button></div>`;
+ setWellnessMode('cozy');
+}
+function setWellnessMode(mode){
+ wellnessMode=mode;wellnessChosen=[];const g=wellnessGames.find(x=>x.id===activeWellnessGame);const root=$('wellnessModeStage');if(!root||!g)return;
+ if(mode==='cozy'){
+ root.innerHTML=`<div class="cloud-arena"><div class="game-hud"><span>STAR CLOUDS</span><span id="cloudScore">0 / ${g.actions.length}</span></div><p style="color:#342452;font-weight:900">Tap a cloud to pop it. Watch it tumble down and reveal a little comfort message.</p><div id="cloudTargets" style="display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px;min-height:85px">${g.actions.map((a,i)=>`<button class="cloud-target" id="wellnessAction${i}" aria-label="Pop cloud ${i+1}" onclick="chooseWellnessAction(${i})">☁</button>`).join('')}</div><div class="game-world-floor"></div></div><div id="cozyCompanionMessage" class="game-toast">${esc(companion.name)}: “Pick any cloud. There is no wrong one.”</div><button class="game-next" onclick="setWellnessMode('adventure')">Switch to Adventure Mode →</button>`;
+ } else {
+ root.innerHTML=`<div class="cloud-arena" style="background:linear-gradient(180deg,#3a316c,#7c61bd 60%,#e9b7e5);color:white"><div class="game-hud"><span>MINI QUEST</span><span id="adventureScore">0 / ${g.actions.length}</span></div><p style="color:white">Choose a glowing portal. Your companion will reveal what you found.</p><div id="wellnessPlayField" style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:20px 0">${g.actions.map((a,i)=>`<button class="game-card mode-choice" id="wellnessAction${i}" style="color:var(--fg);cursor:pointer;min-width:130px" onclick="chooseWellnessAction(${i})"><div style="font-size:28px">${['✦','◇','☁','✿','★'][i%5]}</div><strong>${esc(a[0])}</strong><p class="muted">Explore portal</p></button>`).join('')}</div></div><button class="game-next" onclick="setWellnessMode('cozy')">← Switch to Cozy Mode</button>`;
+ }
+}
+function chooseWellnessAction(i){
+ const g=wellnessGames.find(x=>x.id===activeWellnessGame);if(!g||wellnessChosen.includes(i))return;wellnessChosen.push(i);
+ const btn=$('wellnessAction'+i);if(btn){if(wellnessMode==='cozy'){btn.classList.add('popped');setTimeout(()=>{btn.disabled=true;btn.textContent='✦';},550);}else{btn.disabled=true;btn.style.opacity='.45';btn.innerHTML='<div class="feature-number">FOUND ✦</div>';}}
+ const box=document.createElement('div');box.className='game-toast';box.innerHTML=`<strong>${esc(companion.name)} says:</strong><p>${esc(g.actions[i][1])}</p>`;const messages=$('wellnessMessages');if(messages)messages.appendChild(box);
+ const score=$('cloudScore')||$('adventureScore');if(score)score.textContent=`${wellnessChosen.length} / ${g.actions.length}`;
+ const buddy=$('cozyCompanionMessage');if(buddy)buddy.textContent=`${companion.name}: “${g.actions[i][1]}”`;
+ if(wellnessChosen.length===g.actions.length){const finish=$('wellnessFinish');if(finish)finish.style.display='block';finish?.scrollIntoView({behavior:'smooth',block:'nearest'});}
+}
+function talkAboutWellnessGame(){
+ const g=wellnessGames.find(x=>x.id===activeWellnessGame);const chosen=wellnessChosen.map(i=>`${g.actions[i][0]}: ${g.actions[i][1]}`).join('\n');
+ const reflection=$('wellnessReflection')?.value?.trim()||'No reflection shared';const after=$('wellnessAfter')?.value||'not sure';const next=$('wellnessNext')?.value||'not chosen';const check=window.mantraJourneyContext||{};window.mantraGamePrompt=`I completed Mantra's interactive wellbeing world: ${g.name} (${g.tag}). Check-in (user-selected): feeling=${check.feeling||'not shared'}, energy=${check.energy||'not shared'}, support wanted=${check.need||'not shared'}. Optional note=${check.note||'not shared'}. Game choices and reflections:\n${chosen||'No prompts selected'}. My reflection=${reflection}. My reported change=${after}. My chosen next step=${next}. Respond warmly, acknowledge without assuming the game fixed anything, and ask at most one gentle question. Offer choices: talk more, be distracted, or make the next step smaller. Do not diagnose or present this as treatment.`;nav('companion');
+}
+function renderBalloonGame(){openWellnessGame('patience');}
+function popBalloon(i){chooseWellnessAction(i);}
+function talkAboutBalloons(){talkAboutWellnessGame();}
+function renderOldStoryQuestUnused(){
+ const scene=companionGameScenes[companionGameIndex%companionGameScenes.length];
+ c.innerHTML=`<div class="game-card"><div class="eyebrow">CO-OP STORY QUEST · ${companionGameIndex+1} / ${companionGameScenes.length}</div><div class="companion-banner">${legoFigure(companion)}<div><h3>${esc(companion.name)} invites you to play</h3><p class="muted">No scores to lose. Pick the choice that feels right to you.</p><div class="feature-number">STARS COLLECTED: <span id="questStars">${companionGameStars}</span> ★</div></div></div><div class="pixel-world" style="height:220px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px"><div style="font-size:48px;filter:drop-shadow(0 0 14px #f4a8e7)">✦　☁　✧</div><div class="world-label pixel">ADVENTURE ${companionGameIndex+1}</div><h3 style="color:#fff;text-align:center">${esc(scene.title)}</h3><div style="font-size:24px">✧　✦　✧</div></div><h3 style="margin-top:24px">${esc(scene.story)}</h3><p class="muted">What should you and ${esc(companion.name)} do?</p><div class="feature-grid">${scene.choices.map((ch,i)=>`<button class="game-card" style="text-align:left;cursor:pointer;color:var(--fg)" onclick="chooseGameAction(${i})"><div class="feature-number">CHOICE 0${i+1}</div><h3>${esc(ch[0])}</h3><p class="muted">Choose this path</p></button>`).join('')}</div><div id="gameResult" aria-live="polite"></div><p class="muted">This is a small, fictional wellbeing game—not therapy or a mental-health assessment.</p></div>`;
+}
+function chooseGameAction(i) {
+ const scene=companionGameScenes[companionGameIndex%companionGameScenes.length];
+ companionGameStars++;
+ const result=$('gameResult');
+ result.innerHTML=`<div class="result"><div class="eyebrow">QUEST MOMENT · +1 STAR ★</div><h3>${esc(companion.name)} says…</h3><p>${esc(scene.choices[i][1])}</p><p class="muted">You chose: ${esc(scene.choices[i][0])}</p><button class="pixel-btn pink" onclick="nextGameScene()">${companionGameIndex===companionGameScenes.length-1?'PLAY AGAIN':'NEXT ADVENTURE'} →</button> <button class="pixel-btn dark" onclick="nav('companion')">TALK ABOUT IT</button></div>`;
+ try{localStorage.setItem('mantraQuestStars',String(companionGameStars));}catch(e){}
+}
+function nextGameScene(){companionGameIndex=(companionGameIndex+1)%companionGameScenes.length;renderGame($('content'));}
+
+let careerHistory=[];
+function renderCareer(c) {
+ careerHistory=[];
+ c.innerHTML=`<section class="game-card"><div class="eyebrow">MANTRA CAREER QUEST</div><h2>Turn your goal into a real plan.</h2>
+ <p class="muted">Tell us where you are now and what you want to work toward. Your guide will help you explore options, identify skill gaps, and create a practical roadmap—not promise guaranteed outcomes.</p>
+ <div class="notice">AI guidance can help you plan, but it can be wrong or out of date. Verify course requirements, fees, deadlines, salaries and eligibility with official sources. Don't enter private identifiers or confidential information.</div>
+ <form id="careerForm">
+  <div class="field"><label for="careerGoal">What would you like to achieve?</label><textarea class="game-input" id="careerGoal" maxlength="1200" rows="3" required placeholder="Example: I am a college student and want to become a UI/UX designer, but I don't know where to start."></textarea></div>
+  <div class="two-column">
+   <div class="field"><label for="careerStage">Where are you right now?</label><select id="careerStage" class="game-input"><option>School student</option><option>College student</option><option>Recent graduate</option><option>Working professional</option><option>Career break / changing careers</option><option>Exploring, not sure yet</option></select></div>
+   <div class="field"><label for="careerTimeline">Target timeline</label><select id="careerTimeline" class="game-input"><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option><option>1–2 years</option><option>Flexible / help me decide</option></select></div>
+   <div class="field"><label for="careerHours">Time available each week</label><select id="careerHours" class="game-input"><option>2–4 hours</option><option>5–7 hours</option><option>8–12 hours</option><option>13+ hours</option><option>Not sure yet</option></select></div>
+   <div class="field"><label for="careerBudget">Learning budget</label><select id="careerBudget" class="game-input"><option>Free resources only</option><option>Small budget</option><option>Can invest in a course</option><option>Need help deciding</option></select></div>
+  </div>
+  <div class="field"><label for="careerStrengths">Your current skills, interests or obstacles (optional)</label><textarea class="game-input" id="careerStrengths" maxlength="1000" rows="3" placeholder="What you enjoy, what you already know, what feels difficult..."></textarea></div>
+  <button class="pixel-btn pink" id="careerSubmit" type="submit">BUILD MY ROADMAP →</button>
+ </form>
+ <div id="careerConversation" class="career-chat" aria-live="polite"><div class="career-message ai">Hi! I can help you explore career options, learning paths, portfolio projects, exam or application preparation, and realistic milestones. Start by telling me your goal above.</div></div>
+ <form id="careerFollowupForm"><div class="field"><label for="careerFollowup">Ask a follow-up or adjust your plan</label><textarea id="careerFollowup" class="game-input" rows="2" maxlength="1000" placeholder="Example: I only have 4 hours a week. Can you adapt the roadmap?" required></textarea></div><button class="pixel-btn dark" type="submit">CONTINUE WITH CAREER GUIDE →</button></form>
+ <p class="muted" id="careerStatus" aria-live="polite">Your roadmap is generated by AI when the server is configured. It is not a placement guarantee or a substitute for a qualified career adviser.</p>
+ </section>`;
+ $('careerFollowupForm').addEventListener('submit',e=>{e.preventDefault();sendCareerMessage($('careerFollowup').value.trim())});
+ $('careerForm').addEventListener('submit',e=>{e.preventDefault();startCareerRoadmap()});
+}
+function addCareerBubble(role,text) {
+ const box=document.createElement('div');box.className='career-message '+(role==='user'?'mine':'ai');box.textContent=text;
+ $('careerConversation').appendChild(box);$('careerConversation').scrollTop=$('careerConversation').scrollHeight;
+}
+function careerProfile() {
+ return {goal:$('careerGoal')?.value.trim()||'',stage:$('careerStage')?.value||'',timeline:$('careerTimeline')?.value||'',hours:$('careerHours')?.value||'',budget:$('careerBudget')?.value||'',strengths:$('careerStrengths')?.value.trim()||''};
+}
+async function callCareerAI(message) {
+ const p=careerProfile();
+ const response=await fetch('/api/career',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,profile:p,history:careerHistory.slice(-8)})});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok)throw new Error(data.error||'Career guidance is temporarily unavailable.');
+ if(!data.reply)throw new Error('The career guide returned an empty response.');
+ careerHistory.push({role:'user',content:message},{role:'assistant',content:data.reply});
+ addCareerBubble('assistant',data.reply);
+}
+async function startCareerRoadmap() {
+ const p=careerProfile();if(!p.goal)return toast('Tell us your goal first.');
+ const btn=$('careerSubmit');btn.disabled=true;btn.textContent='BUILDING YOUR ROADMAP…';$('careerStatus').textContent='The career guide is thinking…';
+ addCareerBubble('user',`My goal: ${p.goal}\nCurrent stage: ${p.stage}\nTimeline: ${p.timeline}\nTime available: ${p.hours}\nBudget: ${p.budget}${p.strengths?'\nSkills/interests/obstacles: '+p.strengths:''}`);
+ try { await callCareerAI(`Create my personalized career roadmap using this profile: ${JSON.stringify(p)}. Be realistic and specific. Include: (1) what you understand about my goal, (2) any key assumptions or one important question if needed, (3) phases with milestones and approximate durations, (4) skills to learn in priority order, (5) practical projects or evidence of ability, (6) weekly schedule based on my available hours, (7) free or low-cost resource types, (8) how to measure progress, (9) common risks and alternatives, and (10) the next three actions I can do this week. Separate facts from estimates and do not invent current course fees, deadlines, eligibility or placement guarantees.`); }
+ catch(e){addCareerBubble('assistant',e.message+' Check that the Vercel project includes api/career.js and OPENAI_API_KEY is configured, then redeploy.');$('careerStatus').textContent='Could not generate roadmap.';}
+ finally{btn.disabled=false;btn.textContent='BUILD MY ROADMAP →';if($('careerStatus'))$('careerStatus').textContent='Keep adjusting the plan as your time, interests and opportunities change.';}
+}
+async function sendCareerMessage(message) {
+ if(!message)return;const input=$('careerFollowup');input.value='';input.disabled=true;
+ const form=$('careerFollowupForm'),btn=form.querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='THINKING…';
+ addCareerBubble('user',message);
+ try { await callCareerAI(message); }
+ catch(e){addCareerBubble('assistant',e.message+' Check the Vercel function and API key configuration.');}
+ finally{input.disabled=false;btn.disabled=false;btn.textContent='CONTINUE WITH CAREER GUIDE →';input.focus();}
+}
+
+function renderCompanion(c) {
+ c.innerHTML=`<div class="game-card"><div class="eyebrow">YOUR COMPANION · PRIVATE CHECK-IN</div>
+ <div class="companion-banner">${legoFigure(companion)}<div><h3>${esc(companion.name)}</h3><p class="muted">${esc(companion.description)} Tell me about your day. You don't have to make it sound perfect.</p></div></div>
+ <p class="notice">Your companion uses live AI to respond to what you share. Messages are sent securely to Mantra’s server and an AI provider to generate replies. Do not share passwords or highly sensitive identifying information. This companion is supportive, not a therapist or emergency service.</p>
+ <div id="companionChat" class="chat" aria-live="polite"><div class="bubble">Hey ${esc(name)}! I'm ${esc(companion.name)}. How are you feeling today?</div></div>
+ <form id="companionForm"><div class="field"><label for="companionInput">Tell your companion about your day</label><textarea class="game-input" id="companionInput" maxlength="1000" rows="3" placeholder="Today was..." required></textarea></div>
+ <button class="pixel-btn pink">SEND MESSAGE →</button> <button type="button" class="pixel-btn dark" onclick="readCompanionReply()">READ REPLY ALOUD</button></form></div>`;
+ $('companionForm').addEventListener('submit',e=>{e.preventDefault();sendCompanionMessage()});
+ if(window.mantraGamePrompt){$('companionInput').value=window.mantraGamePrompt;window.mantraGamePrompt='';$('companionInput').focus();}
+}
+async function sendCompanionMessage() {
+ const input=$('companionInput'),message=input.value.trim();if(!message)return;
+ const chat=$('companionChat');
+ const mine=document.createElement('div');mine.className='bubble mine';mine.textContent=message;chat.appendChild(mine);
+ input.value='';input.disabled=true;
+ const sendButton=$('companionForm')?.querySelector('button[type="submit"],button:not([type])');
+ if(sendButton){sendButton.disabled=true;sendButton.textContent='THINKING…';}
+ const pending=document.createElement('div');pending.className='bubble';pending.textContent=companion.name+' is thinking…';pending.setAttribute('aria-live','polite');chat.appendChild(pending);chat.scrollTop=chat.scrollHeight;
+ try {
+  const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,displayName:name||'Hero',companionName:companion.name||'Your companion',companionDescription:companion.description||'',history:Array.from(chat.querySelectorAll('.bubble')).slice(-9,-1).map(b=>({role:b.classList.contains('mine')?'user':'assistant',content:b.textContent})).filter(m=>m.content && !m.content.endsWith('is thinking…'))})});
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(data.error||'The AI service could not respond.');
+  pending.textContent=data.reply||'I’m here with you. Could you tell me a little more?';
+ } catch(error) {
+  pending.textContent='I couldn’t reach your AI companion just now. Please try again in a moment.';
+  console.error('Mantra AI request failed:',error);
+ } finally {
+  input.disabled=false;if(sendButton){sendButton.disabled=false;sendButton.textContent='SEND MESSAGE →';}input.focus();chat.scrollTop=chat.scrollHeight;
+ }
+}
+function readCompanionReply() {
+ const bubbles=$('companionChat')?.querySelectorAll('.bubble');
+ if(bubbles?.length)speakText(bubbles[bubbles.length-1].textContent);
+}
+function speakText(t) {
+ if(!('speechSynthesis' in window))return toast('Voice is not available in this browser.');
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=.9;u.pitch=1.02;speechSynthesis.speak(u);
+}
+function renderCallie(c) {
+ c.innerHTML=`<div class="game-card"><div class="eyebrow">REFLECTION SPACE</div><h3>What would you like to untangle?</h3><p class="muted">Write a reflection. It is not uploaded to a server.</p>
+ <div class="field"><label for="reflectionMood">How are you feeling?</label><select id="reflectionMood" class="game-input"><option>Not sure yet</option><option>Calm</option><option>Happy</option><option>Sad</option><option>Stressed</option><option>Lonely</option><option>Overwhelmed</option></select></div>
+ <div class="field"><label for="reflectionInput">A thought for today</label><textarea id="reflectionInput" class="game-input" rows="5" maxlength="2000" placeholder="Today I have been feeling..."></textarea></div>
+ <button class="pixel-btn dark" onclick="reflectionPrompt('What do I need right now?')">WHAT DO I NEED?</button>
+ <button class="pixel-btn dark" onclick="reflectionPrompt('What is one thing I can control today?')">WHAT CAN I CONTROL?</button>
+ <button class="pixel-btn dark" onclick="reflectionPrompt('What is one small thing I did well?')">ONE SMALL WIN</button>
+ <p><button class="pixel-btn pink" onclick="saveReflection()">SAVE THIS REFLECTION</button></p><p id="reflectionStatus" class="muted"></p></div>`;
+}
+function reflectionPrompt(t) {$('reflectionInput').value=t+' ';$('reflectionInput').focus()}
+function saveReflection() {
+ const t=$('reflectionInput').value.trim();if(!t)return toast('Write a reflection first.');
+ $('reflectionStatus').textContent='Reflection ready for this session. Mood: '+$('reflectionMood').value+'. It has not been uploaded to a server.';
+ toast('Thank you for checking in with yourself.');
+}
+function renderPanic(c) {
+ paused=false;
+ c.innerHTML=`<div class="two-column"><section class="game-card"><div class="eyebrow">REST POINT</div><h3>One breath at a time.</h3>
+ <p class="muted">If comfortable, follow the circle. Breathe naturally; do not force deep breaths or hold your breath.</p>
+ <div id="breath" class="breath"><b id="breathText">Breathe in<br>gently</b></div>
+ <button class="pixel-btn pink" id="breathButton" onclick="toggleBreath()">PAUSE GUIDE</button><p class="muted">Stop if you feel dizzy or worse. You can simply breathe normally.</p></section>
+ <section class="game-card"><div class="eyebrow">GROUNDING QUEST</div><h3>Reconnect with the present.</h3>
+ <p>01 — Name <b>5 things</b> you can see.</p><p>02 — Notice <b>4 things</b> you can feel.</p><p>03 — Listen for <b>3 sounds</b>.</p><p>04 — Identify <b>2 smells</b>.</p><p>05 — Notice <b>1 taste</b>, or name one thing you need.</p>
+ <button class="pixel-btn pink" onclick="play54321()">PLAY 5–4–3–2–1 VOICE GUIDE</button> <button class="pixel-btn dark" onclick="stopVoice()">STOP VOICE</button>
+ <p id="voiceStatus" class="muted" aria-live="polite">Uses your browser's built-in speech.</p>
+ <div class="notice">For severe chest pain, fainting, serious difficulty breathing, or immediate danger, seek urgent medical help.</div></section></div>`;
+}
+function toggleBreath() {
+ paused=!paused;$('breath').classList.toggle('paused',paused);
+ $('breathButton').textContent=paused?'RESUME GUIDE':'PAUSE GUIDE';
+ $('breathText').innerHTML=paused?'Take a natural<br>breath':'Breathe in<br>gently';
+}
+function play54321() {
+ if($('voiceStatus'))$('voiceStatus').textContent='Playing the grounding guide.';
+ speakText('Welcome to your five four three two one grounding exercise. Go slowly and skip any step that does not feel comfortable. First, name five things you can see. Next, notice four things you can feel. Listen for three sounds. Notice two smells, if you can. Finally, notice one taste in your mouth, or name one thing you need right now. You have finished. Take a natural breath. Stop if you feel uncomfortable.');
+}
+function stopVoice() {
+ if('speechSynthesis' in window)speechSynthesis.cancel();
+ if($('voiceStatus'))$('voiceStatus').textContent='Voice stopped. Continue at your own pace.';
+}
+
+renderUniverses();
+renderThemeButtons('selectionThemes');
+</script>
+</body>
+</html>

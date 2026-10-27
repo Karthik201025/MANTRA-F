@@ -1,0 +1,21 @@
+name = "mantra-local-agent"
+main = "worker/index.ts"
+compatibility_date = "2026-10-25"
+compatibility_flags = ["nodejs_compat"]
+
+[ai]
+binding = "AI"
+
+[[durable_objects.bindings]]
+name = "MantraAgent"
+class_name = "MantraAgent"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["MantraAgent"]
+
+[vars]
+AI_MODEL = "@cf/meta/llama-3.1-8b-instruct"
+
+# Set AGENT_TOKEN with `wrangler secret put AGENT_TOKEN` for a real account.
+# Do not commit credentials.

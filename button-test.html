@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Button Test - Mantra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #111027;
+            color: white;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #242047;
+            border: 2px solid #8b70f5;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background: #8b70f5;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #a995ff;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #17132f;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mantra Button Interaction Test</h1>
+
+    <div class="test-section">
+        <h2>Test 1: Direct JavaScript Click</h2>
+        <button onclick="document.getElementById('result').textContent = 'Direct JavaScript works!'">
+            Click Me (Direct JS)
+        </button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Load Mantra App in iframe</h2>
+        <iframe
+            src="http://localhost:3000/"
+            width="100%"
+            height="600"
+            style="border: 2px solid #8b70f5; background: white;"
+        ></iframe>
+        <p>Try clicking the "ENTER WORLD" button in the iframe above</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Check if React is hydrating</h2>
+        <button id="testBtn">Test React Hydration</button>
+        <p id="hydrationStatus">Checking...</p>
+    </div>
+
+    <div id="result">
+        Click buttons above to test...
+    </div>
+
+    <script>
+        // Test if JavaScript is running
+        console.log('Test page JavaScript loaded');
+
+        // Test React hydration detection
+        document.getElementById('testBtn').addEventListener('click', function() {
+            fetch('http://localhost:3000/')
+                .then(r => r.text())
+                .then(html => {
+                    const hasReactRoot = html.includes('__next');
+                    const hasScripts = html.includes('script');
+                    document.getElementById('hydrationStatus').innerHTML =
+                        'React root found: ' + hasReactRoot + '<br>' +
+                        'Scripts found: ' + hasScripts;
+                    document.getElementById('result').innerHTML =
+                        'HTML length: ' + html.length + ' chars<br>' +
+                        'Contains React: ' + hasReactRoot;
+                });
+        });
+
+        // Auto-check after 2 seconds
+        setTimeout(() => {
+            document.getElementById('testBtn').click();
+        }, 2000);
+    </script>
+</body>
+</html>
