@@ -5,4 +5,7 @@ out/
 *.tsbuildinfo
 .env*
 !.env.example
+.env.rls-test
+.env.rls-test.*
+!.env.rls-test.example
 npm-debug.log*
