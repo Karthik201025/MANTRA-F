@@ -1,11 +1,13 @@
 :root {
-  --bg: #111027;
-  --panel: #242047;
-  --accent: #8b70f5;
-  --soft: #f4a8e7;
+  --bg: #0f1024;
+  --panel: #1b1b3a;
+  --panel-raised: #292653;
+  --accent: #9b7bff;
+  --soft: #ff9bd7;
+  --gold: #f7cf68;
   --fg: #fff9ff;
-  --muted: #c3bedc;
-  --line: #665b9c;
+  --muted: #cbc6e0;
+  --line: #6d61a6;
   --font-body: var(--font-nunito-sans), "Nunito Sans", Nunito, Arial, sans-serif;
   --text-body: 1rem;
   --text-small: 0.875rem;
@@ -577,13 +579,16 @@ p {
 .game-card {
   min-width: 0;
   padding: 22px;
-  background: var(--panel);
+  background: linear-gradient(145deg, var(--panel-raised), var(--panel));
   border: 3px solid var(--line);
   box-shadow: 5px 5px #0a0919;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 .game-card:hover {
   border-color: var(--soft);
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px #0a0919;
 }
 
 .feature-number {
@@ -642,6 +647,7 @@ p {
   border-color: var(--soft);
   background: var(--bg);
   color: var(--fg);
+  box-shadow: 3px 3px 0 var(--soft);
 }
 
 .app-main {
@@ -654,6 +660,7 @@ p {
   justify-content: space-between;
   gap: 24px;
   padding: 32px 5%;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--panel) 80%, transparent), transparent);
   border-bottom: 4px solid var(--panel);
 }
 
