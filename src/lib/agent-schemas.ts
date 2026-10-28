@@ -29,6 +29,12 @@ function textArray(value: unknown, field: string, maxItems = MAX_ARRAY_ITEMS): s
   return value.map((item) => text(item, field, MAX_SHORT_TEXT));
 }
 
+function exactKeys(data: RecordValue, keys: string[]): void {
+  const actual = Object.keys(data).sort();
+  const expected = [...keys].sort();
+  if (actual.length !== expected.length || actual.some((key, index) => key !== expected[index])) invalid("object shape");
+}
+
 function boolean(value: unknown, field: string): boolean {
   if (typeof value !== "boolean") invalid(field);
   return value;
@@ -47,10 +53,12 @@ export function parseAgentResponse(agent: AgentName, raw: string): RecordValue {
   const data = parseJson(raw);
 
   if (agent === "companion") {
+    exactKeys(data, ["reply"]);
     return { reply: text(data.reply, "reply") };
   }
 
   if (agent === "career") {
+    exactKeys(data, ["title", "summary", "skills", "steps"]);
     if (!Array.isArray(data.steps) || data.steps.length === 0 || data.steps.length > MAX_ARRAY_ITEMS) invalid("steps");
     return {
       roadmap: {
@@ -59,6 +67,7 @@ export function parseAgentResponse(agent: AgentName, raw: string): RecordValue {
         skills: textArray(data.skills, "skills"),
         steps: data.steps.map((step) => {
           const item = record(step);
+          exactKeys(item, ["title", "description", "timeframe"]);
           return {
             title: text(item.title, "step title", MAX_SHORT_TEXT),
             description: text(item.description, "step description"),
@@ -70,6 +79,7 @@ export function parseAgentResponse(agent: AgentName, raw: string): RecordValue {
   }
 
   if (agent === "quest") {
+    exactKeys(data, ["type", "title", "content", "options", "explanation", "difficulty"]);
     return {
       activity: {
         type: text(data.type, "type", MAX_SHORT_TEXT),
@@ -83,6 +93,7 @@ export function parseAgentResponse(agent: AgentName, raw: string): RecordValue {
   }
 
   if (agent === "reflection") {
+    exactKeys(data, ["prompt", "context", "examples"]);
     return {
       prompt: {
         prompt: text(data.prompt, "prompt"),
@@ -93,6 +104,7 @@ export function parseAgentResponse(agent: AgentName, raw: string): RecordValue {
   }
 
   if (agent === "safety") {
+    exactKeys(data, ["severity", "category", "action", "reasoning", "requires_human"]);
     const severity = text(data.severity, "severity", MAX_SHORT_TEXT);
     const action = text(data.action, "action", MAX_SHORT_TEXT);
     if (!["low", "medium", "high", "critical"].includes(severity)) invalid("severity");
@@ -108,6 +120,7 @@ export function parseAgentResponse(agent: AgentName, raw: string): RecordValue {
     };
   }
 
+  exactKeys(data, ["suggestion", "reasoning", "preview"]);
   return {
     suggestion: {
       suggestion: text(data.suggestion, "suggestion"),
