@@ -117,8 +117,8 @@ export const characterAssets: CharacterAsset[] = characters.map(([universe, name
   kind,
   visualNotes,
   imageFile: characterImageFiles[name],
-  imagePath: `/images/characters/${characterImageFiles[name]}`,
-  imageExists: false,
+  imagePath: `/images/characters/processed/${characterImageFiles[name].replace(/\.png$/i, "").replace("black-widow", "blackwidow").replace("iron-man", "ironman").replace("captain-america", "captain-america").replace("keroppi", "kerropi")}.png`,
+  imageExists: ["Spider-Man", "Iron Man", "Black Widow", "Captain America", "Thor", "Shuri", "Barbie", "Princess Barbie", "Astronaut Barbie", "Mermaid Barbie", "Artist Barbie", "Hello Kitty", "Kuromi", "My Melody", "Cinnamoroll", "Pompompurin", "Keroppi", "Batman", "Superman", "Rapunzel", "Cinderella", "Moana", "Belle", "Tiana", "Mulan"].includes(name),
   ...(providedModels[name] ?? {
     source: "original-css-demo" as const,
     licensing: "review-required-before-commercial-use" as const,

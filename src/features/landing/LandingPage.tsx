@@ -6,8 +6,6 @@ import Image from "next/image";
 import { MantraMark } from "@/components/MantraMark";
 import { CharacterModel } from "@/components/CharacterModel";
 import { characterAssets } from "@/data/character-assets";
-import { GameSurface } from "@/features/games/GameSurface";
-import { tinyStepTrailAdapter } from "@/features/games/tiny-step-trail";
 
 type Theme = {
   name: string;
@@ -285,13 +283,12 @@ function Brand({ showTagline = true }: { showTagline?: boolean }) {
   );
 }
 
-type PageKey = "home" | "companion" | "career" | "game" | "match" | "communities" | "feed" | "callie" | "panic" | "moderation";
+type PageKey = "home" | "companion" | "career" | "match" | "communities" | "feed" | "callie" | "panic" | "moderation";
 
       const pageInfo: Record<PageKey, [string, string]> = {
         home: ["My World", "Your pace. Your path."],
         companion: ["Talk to Your Companion", "Your chosen companion is here to listen."],
         career: ["Career Guidance", "Explore options and build a realistic, step-by-step roadmap."],
-        game: ["Play Together", "A little world for how today feels — no pressure."],
         match: ["Right Match", "Discover the kind of connection that feels right."],
         communities: ["Worlds", "Explore supportive topic-based spaces."],
         feed: ["Community Feed", "Share a thought or a little encouragement."],
@@ -309,15 +306,6 @@ type PageKey = "home" | "companion" | "career" | "game" | "match" | "communities
         ["Quiet Corner", "No pressure to share more than you want."],
       ];
 
-      const wellnessGames: [string, string, string[]][] = [
-        ["Patience Garden", "Grow a tiny garden one gentle choice at a time.", ["Give it water", "Clear one stone", "Sit beside it"]],
-        ["Cloud Sorter", "Sort floating thoughts into what you can act on and what can wait.", ["Something I can do today", "Something I cannot solve right now", "A thought asking for certainty"]],
-        ["Grounding Explorer", "A calm sensory scavenger hunt to reconnect with the room around you.", ["Notice 5 things you can see", "Notice 4 things you can feel", "Notice 3 things you can hear"]],
-        ["Comfort Room", "Build a little refuge by choosing the kind of comfort you want.", ["A soft blanket and quiet", "A kind note to myself", "A friendly presence"]],
-        ["Meteor Mender", "Tap glowing meteors to turn a storm into little sparks.", ["Tap a meteor", "Tap another meteor", "Gather the sparks"]],
-        ["Tiny Step Trail", "Cross stepping stones by choosing tiny doable actions.", ["Open the task", "Work for two minutes", "Ask for help or a break"]],
-      ];
-
       const matchQuestions: [string, string[]][] = [
         ["What kind of support do you want?", ["Someone who listens", "Practical ideas", "Encouragement", "I am not sure"]],
         ["What makes a conversation safe?", ["Gentle and patient replies", "Kind honesty", "Light chat first", "I set the pace"]],
@@ -327,12 +315,6 @@ type PageKey = "home" | "companion" | "career" | "game" | "match" | "communities
         ["How often do you want to check in?", ["Most days", "A few times a week", "When I feel like it", "Not sure"]],
         ["What matters most in a match?", ["Similar experiences", "Similar communication", "Respect for boundaries", "Different perspective"]],
       ];
-
-      const storyScenes = [
-        ["The Cloud Bridge", "A little bridge of clouds blocks the path. What should you do together?", ["Build it one small step at a time", "Ask a friendly bird for help", "Take a pause and look around"]],
-        ["The Quiet Forest", "The forest is full of glowing plants, but the path feels unfamiliar.", ["Follow the glowing flowers", "Make a map together", "Choose the coziest resting spot"]],
-        ["The Star Garden", "A garden has lost its sparkle. It needs one kind action to begin glowing again.", ["Water one tiny plant", "Leave a kind note", "Invite your companion to help"]],
-      ] as const;
 
       function readLocal<T>(key: string, fallback: T): T {
         try {
@@ -363,17 +345,12 @@ type PageKey = "home" | "companion" | "career" | "game" | "match" | "communities
         const [reflection, setReflection] = useState("");
         const [feedback, setFeedback] = useState("");
         const [selectedWorld, setSelectedWorld] = useState<number | null>(null);
-        const [gameChoice, setGameChoice] = useState("");
         const [matchResult, setMatchResult] = useState("");
         const [breathing, setBreathing] = useState(false);
         const [reports, setReports] = useState<{ id: number; postId: number | string; reason: string; status: "Open" | "Closed" }[]>(() => readLocal("mantraDemoReports", []));
         const [reportingPostId, setReportingPostId] = useState<number | string | null>(null);
         const [reportReason, setReportReason] = useState("");
         const [careerFollowup, setCareerFollowup] = useState("");
-        const [gameMode, setGameMode] = useState<"cozy" | "adventure">("cozy");
-        const [gameAction, setGameAction] = useState("");
-        const [storyIndex, setStoryIndex] = useState(0);
-        const [storyStars, setStoryStars] = useState(() => readLocal("mantraQuestStars", 0));
 
         function notify(text: string) {
           setToast(text);
@@ -469,16 +446,8 @@ type PageKey = "home" | "companion" | "career" | "game" | "match" | "communities
           setMatchResult(results[values.reduce((sum, value) => sum + value, 0) % results.length]);
         }
 
-        function chooseStoryAction() {
-          const nextStars = storyStars + 1;
-          setStoryStars(nextStars);
-          writeLocal("mantraQuestStars", nextStars);
-          setStoryIndex((current) => (current + 1) % storyScenes.length);
-          notify("A calm star joined your journey.");
-        }
-
         function renderHome() {
-          return <><section className="welcome game-card"><div className="eyebrow">PLAYER {name.toUpperCase() || "HERO"}</div><h2>Your world is yours to build.</h2><p className="muted">Your companion {companion.name} is here to listen while you explore, reflect, or take a breath.</p><button className="pixel-btn pink" onClick={() => navigate("companion")}>TALK TO MY COMPANION →</button></section><div className="lego-guide"><LegoFigure character={companion} /><div><div className="eyebrow">YOUR IN-WORLD GUIDE</div><h3>{companion.name} is here, {name || "Hero"}.</h3><p className="muted">{companion.description} I&apos;ll guide you through your world and listen when you want to talk.</p></div></div><div className="feature-grid">{[["Play Together", "game"], ["Build your roadmap", "career"], ["Meet your match", "match"], ["Explore new worlds", "communities"], ["Take a pause", "panic"]].map(([title, key]) => <article className="game-card" key={key}><div className="feature-number">QUEST</div><h3>{title}</h3><p className="muted">Find a small next step with your companion.</p><button className="pixel-btn dark" onClick={() => navigate(key as PageKey)}>OPEN →</button></article>)}</div></>;
+          return <><section className="welcome game-card"><div className="eyebrow">PLAYER {name.toUpperCase() || "HERO"}</div><h2>Your world is yours to build.</h2><p className="muted">Your companion {companion.name} is here to listen while you explore, reflect, or take a breath.</p><button className="pixel-btn pink" onClick={() => navigate("companion")}>TALK TO MY COMPANION →</button></section><div className="lego-guide"><LegoFigure character={companion} /><div><div className="eyebrow">YOUR IN-WORLD GUIDE</div><h3>{companion.name} is here, {name || "Hero"}.</h3><p className="muted">{companion.description} I&apos;ll guide you through your world and listen when you want to talk.</p></div></div><div className="feature-grid">{[["Build your roadmap", "career"], ["Meet your match", "match"], ["Explore new worlds", "communities"], ["Take a pause", "panic"]].map(([title, key]) => <article className="game-card" key={key}><div className="feature-number">QUEST</div><h3>{title}</h3><p className="muted">Find a small next step with your companion.</p><button className="pixel-btn dark" onClick={() => navigate(key as PageKey)}>OPEN →</button></article>)}</div></>;
         }
 
         function renderCompanion() {
@@ -489,9 +458,80 @@ type PageKey = "home" | "companion" | "career" | "game" | "match" | "communities
           return <section className="game-card"><div className="eyebrow">MANTRA CAREER QUEST</div><h2>Turn your goal into a real plan.</h2><p className="muted">Explore options, identify skill gaps, and create practical milestones. AI guidance can be wrong or out of date; verify requirements with official sources.</p><div className="notice">Career guidance requires a configured Cloudflare agent. The local route validates your request and will show a configuration error instead of inventing a roadmap.</div><div className="field"><label htmlFor="career-goal">What would you like to achieve?</label><textarea id="career-goal" className="game-input" value={message} onChange={(event) => setMessage(event.target.value)} rows={4} maxLength={1200} placeholder="Example: I want to become a UI/UX designer..." /></div><button className="pixel-btn pink" onClick={async () => { const prompt = message.trim(); if (!prompt) return notify("Tell us your goal first."); setFeedback("Building your roadmap…"); try { const response = await fetch("/api/career", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prompt, displayName: name || "Hero" }) }); const data = (await response.json().catch(() => ({}))) as { roadmap?: unknown; error?: string }; if (!response.ok || !data.roadmap) throw new Error(data.error || "The career agent returned no roadmap."); setFeedback("Your roadmap is ready. Review each step and verify details with official sources."); } catch (error) { setFeedback(error instanceof Error ? error.message : "The career agent could not be reached."); } }}>BUILD MY ROADMAP →</button><div className="field"><label htmlFor="career-followup">Ask a follow-up or adjust your plan</label><textarea id="career-followup" className="game-input" value={careerFollowup} onChange={(event) => setCareerFollowup(event.target.value)} rows={3} maxLength={1000} placeholder="I only have four hours a week. Can you adapt the plan?" /></div><button className="pixel-btn dark" onClick={() => careerFollowup.trim() ? setFeedback("Follow-up requests will use the same configured career agent.") : notify("Write a follow-up first.")}>CONTINUE WITH CAREER GUIDE →</button>{feedback && <p className="result" aria-live="polite">{feedback}</p>}</section>;
         }
 
+        /* Play Together is temporarily hidden; game modules remain available for later restoration.
         function renderGame() {
-          return <><section className="game-card"><div className="eyebrow">MANTRA · YOUR EMOTIONAL QUEST</div><h2>Choose a small world for today.</h2><p className="muted">Choose a cozy or adventurous mode. This is not a diagnosis; you can stop or switch worlds at any time.</p><div className="button-row"><button className={`pixel-btn ${gameMode === "cozy" ? "pink" : "dark"}`} onClick={() => setGameMode("cozy")}>COZY MODE</button><button className={`pixel-btn ${gameMode === "adventure" ? "pink" : "dark"}`} onClick={() => setGameMode("adventure")}>ADVENTURE MODE</button></div><div className="feature-grid">{wellnessGames.map(([title, description]) => <button className="game-card game-card-button" key={title} onClick={() => { setGameChoice(title); setGameAction(""); }}><div className="feature-number">{gameMode.toUpperCase()} WORLD</div><h3>{title}</h3><p className="muted">{description}</p></button>)}<button className="game-card game-card-button" onClick={() => setGameChoice("Story Quest")}><div className="feature-number">CO-OP ADVENTURE</div><h3>Story Quest</h3><p className="muted">Explore a little story with your companion.</p></button></div>{gameChoice === "Story Quest" && <div className="result"><div className="eyebrow">CALM STARS: {storyStars}</div><h3>{storyScenes[storyIndex][0]}</h3><p>{storyScenes[storyIndex][1]}</p>{storyScenes[storyIndex][2].map((action) => <button className="pixel-btn dark" key={action} onClick={chooseStoryAction}>{action}</button>)}<button className="pixel-btn pink" onClick={() => navigate("companion")}>TALK TO MY COMPANION →</button></div>}{gameChoice === "Tiny Step Trail" && <GameSurface gameId="Tiny Step Trail" adapter={tinyStepTrailAdapter} onExit={() => setGameChoice("")} />}{gameChoice && gameChoice !== "Story Quest" && gameChoice !== "Tiny Step Trail" && <div className="result"><h3>{gameChoice}</h3><p>Pick one small action. There are no wrong answers.</p>{wellnessGames.find(([title]) => title === gameChoice)?.[2].map((action) => <button className="pixel-btn dark" key={action} onClick={() => setGameAction(action)}>{action}</button>)}{gameAction && <><p aria-live="polite">You chose: {gameAction}. Small steps count, and rest is allowed.</p><button className="pixel-btn pink" onClick={() => navigate("companion")}>TALK TO MY COMPANION →</button></>}</div>}</section></>;
+          const selectedGame = wellnessGames.find(([title]) => title === gameChoice);
+          const actions = selectedGame?.[2] ?? [];
+
+          return (
+            <>
+              <section className="game-card">
+                <div className="eyebrow">MANTRA · YOUR EMOTIONAL QUEST</div>
+                <h2>Choose a small world for today.</h2>
+                <p className="muted">
+                  Choose a cozy or adventurous mode. This is not a diagnosis; you can stop or switch worlds at any time.
+                </p>
+                <div className="button-row">
+                  <button className={`pixel-btn ${gameMode === "cozy" ? "pink" : "dark"}`} onClick={() => setGameMode("cozy")}>
+                    COZY MODE
+                  </button>
+                  <button className={`pixel-btn ${gameMode === "adventure" ? "pink" : "dark"}`} onClick={() => setGameMode("adventure")}>
+                    ADVENTURE MODE
+                  </button>
+                </div>
+                <div className="feature-grid">
+                  {wellnessGames.map(([title, description]) => (
+                    <button className="game-card game-card-button" key={title} onClick={() => { setGameChoice(title); setGameAction(""); }}>
+                      <div className="feature-number">{gameMode.toUpperCase()} WORLD</div>
+                      <h3>{title}</h3>
+                      <p className="muted">{description}</p>
+                    </button>
+                  ))}
+                  <button className="game-card game-card-button" onClick={() => { setGameChoice("Story Quest"); setGameAction(""); }}>
+                    <div className="feature-number">CO-OP ADVENTURE</div>
+                    <h3>Story Quest</h3>
+                    <p className="muted">Explore a little story with your companion.</p>
+                  </button>
+                </div>
+              </section>
+
+              {gameChoice === "Story Quest" && (
+                <section className="result">
+                  <div className="eyebrow">CALM STARS: {storyStars}</div>
+                  <h3>{storyScenes[storyIndex][0]}</h3>
+                  <p>{storyScenes[storyIndex][1]}</p>
+                  {storyScenes[storyIndex][2].map((action) => (
+                    <button className="pixel-btn dark" key={action} onClick={chooseStoryAction}>{action}</button>
+                  ))}
+                  <button className="pixel-btn pink" onClick={() => navigate("companion")}>TALK TO MY COMPANION →</button>
+                </section>
+              )}
+
+              {gameChoice === "Tiny Step Trail" && (
+                <GameSurface gameId="Tiny Step Trail" adapter={tinyStepTrailAdapter} onExit={() => setGameChoice("")} />
+              )}
+
+              {gameChoice && gameChoice !== "Story Quest" && gameChoice !== "Tiny Step Trail" && (
+                <section className="result">
+                  <h3>{gameChoice}</h3>
+                  <p>Pick one small action. There are no wrong answers.</p>
+                  {actions.map((action) => (
+                    <button className="pixel-btn dark" key={action} onClick={() => setGameAction(action)}>{action}</button>
+                  ))}
+                  {gameAction && (
+                    <>
+                      <p aria-live="polite">You chose: {gameAction}. Small steps count, and rest is allowed.</p>
+                      <button className="pixel-btn pink" onClick={() => navigate("companion")}>TALK TO MY COMPANION →</button>
+                    </>
+                  )}
+                </section>
+              )}
+            </>
+          );
         }
+
+        }
+        */
 
         function renderMatch() {
           return <section className="game-card"><div className="eyebrow">PLAYER QUEST / 01</div><h2>Find your Right Match</h2><p className="muted">Choose the support style that feels most comfortable. This is not a clinical assessment or a real human match.</p>{matchQuestions.map(([question, options], index) => <div className="field" key={question}><label>{index + 1}. {question}</label>{options.map((option, optionIndex) => <label className="option" key={option}><input type="radio" name={`match-${index}`} value={optionIndex} defaultChecked={optionIndex === 0} />{option}</label>)}</div>)}<button className="pixel-btn pink" onClick={chooseMatch}>REVEAL MY MATCH →</button>{matchResult && <div className="result"><h3>{matchResult}</h3><p>This is a playful preference result, not a clinical assessment or a real human match.</p><button className="pixel-btn dark" onClick={() => navigate("communities")}>EXPLORE WORLDS →</button></div>}</section>;
@@ -517,7 +557,7 @@ type PageKey = "home" | "companion" | "career" | "game" | "match" | "communities
           return <section className="game-card"><div className="eyebrow">COMMUNITY SAFETY</div><h2>Review reports and manage behaviour</h2><p className="muted">Demo moderation tools affect this browser only. A real service must enforce roles and suspensions on its server.</p><input className="game-input" placeholder="Member display name" /><button className="pixel-btn pink" onClick={() => notify("Seven-day demo suspension recorded locally.")}>SUSPEND FOR 7 DAYS</button><button className="pixel-btn dark" onClick={() => notify("No local suspension record found.")}>CHECK SUSPENSION</button><h3>Reports ({reports.filter((report) => report.status === "Open").length} open)</h3>{reports.length ? reports.map((report) => <div className="moderation-row" key={report.id}><span className="status-pill">{report.status}</span><p>Post #{report.postId}: {report.reason}</p><button className="pixel-btn dark" onClick={() => { const next = reports.map((item) => item.id === report.id ? { ...item, status: "Closed" as const } : item); setReports(next); writeLocal("mantraDemoReports", next); }}>DISMISS REPORT</button></div>) : <p className="muted">No reports yet. Report a post from the Community Feed.</p>}</section>;
         }
 
-        const content = { home: renderHome, companion: renderCompanion, career: renderCareer, game: renderGame, match: renderMatch, communities: renderWorlds, feed: renderFeed, callie: renderReflection, panic: renderPause, moderation: renderModeration }[page]();
+        const content = { home: renderHome, companion: renderCompanion, career: renderCareer, match: renderMatch, communities: renderWorlds, feed: renderFeed, callie: renderReflection, panic: renderPause, moderation: renderModeration }[page]();
         return <main className="app-shell"><a className="skip-link" href="#main-content">Skip to main content</a><aside className="app-sidebar"><Brand /><nav className="sidebar-nav" aria-label="Mantra world navigation">{(Object.keys(pageInfo) as PageKey[]).map((key) => <button aria-current={page === key ? "page" : undefined} className={`sidebar-link ${page === key ? "active" : ""}`} key={key} onClick={() => navigate(key)}>{pageInfo[key][0]}</button>)}</nav><button className="pixel-btn dark" onClick={onLeave}>LEAVE WORLD</button></aside><section className="app-main"><header className="app-header"><div><div className="eyebrow">MANTRA WORLD</div><h1 ref={mainHeadingRef} tabIndex={-1}>{pageInfo[page][0]}</h1><p className="muted">{pageInfo[page][1]}</p></div><div className="status-pill">WITH {companion.name.toUpperCase()}</div></header><div className="app-content" id="main-content">{content}</div></section>{toast && <div className="toast" role="status">{toast}</div>}</main>;
 }
 

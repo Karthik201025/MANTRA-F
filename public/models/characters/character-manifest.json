@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-10-28",
+  "sourceOfTruth": "src/data/character-assets.ts",
+  "notes": [
+    "Existing GLB files remain in models/ for the existing model API.",
+    "Processed 2D images and GLBs are also uploaded to the private Supabase bucket mantra-character-assets.",
+    "Remote paths are verified under characters/processed/ and characters/models/; local assets remain rollback copies.",
+    "Unmatched models are documented without guessing a character match."
+  ],
+  "characters": [
+    { "identifier": "spider", "name": "Spider-Man", "universe": "Avengers", "sourceAsset": "models/lego_spiderman.glb", "destination": "/api/models/lego_spiderman.glb", "status": "matched-existing-glb" },
+    { "identifier": "iron", "name": "Iron Man", "universe": "Avengers", "sourceAsset": "models/lego_iron_man.glb", "destination": "/api/models/lego_iron_man.glb", "status": "matched-existing-glb" },
+    { "identifier": "shield", "name": "Captain America", "universe": "Avengers", "sourceAsset": "models/LEGO_-_Captain_America_(Avengers_1).glb", "destination": "/api/models/LEGO_-_Captain_America_(Avengers_1).glb", "status": "matched-existing-glb" },
+    { "identifier": "batman", "name": "Batman", "universe": "DC", "sourceAsset": "models/lego_batman_minifigure.glb", "destination": "/api/models/lego_batman_minifigure.glb", "status": "matched-existing-glb" },
+    { "identifier": "superman", "name": "Superman", "universe": "DC", "sourceAsset": "models/superman_lego.glb", "destination": "/api/models/superman_lego.glb", "status": "matched-existing-glb" },
+    { "identifier": "widow", "name": "Black Widow", "universe": "Avengers", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "thor", "name": "Thor", "universe": "Avengers", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "shuri", "name": "Shuri", "universe": "Avengers", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "barbie", "name": "Barbie", "universe": "Barbie", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "princess", "name": "Princess Barbie", "universe": "Barbie", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "space", "name": "Astronaut Barbie", "universe": "Barbie", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "mermaid", "name": "Mermaid Barbie", "universe": "Barbie", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "artist", "name": "Artist Barbie", "universe": "Barbie", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "kitty", "name": "Hello Kitty", "universe": "Sanrio", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "kuromi", "name": "Kuromi", "universe": "Sanrio", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "melody", "name": "My Melody", "universe": "Sanrio", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "cinnamoroll", "name": "Cinnamoroll", "universe": "Sanrio", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "pompom", "name": "Pompompurin", "universe": "Sanrio", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "keroppi", "name": "Keroppi", "universe": "Sanrio", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "rapunzel", "name": "Rapunzel", "universe": "Disney Princess", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "cinderella", "name": "Cinderella", "universe": "Disney Princess", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "moana", "name": "Moana", "universe": "Disney Princess", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "belle", "name": "Belle", "universe": "Disney Princess", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "tiana", "name": "Tiana", "universe": "Disney Princess", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "mulan", "name": "Mulan", "universe": "Disney Princess", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "block-builder", "name": "Block Builder", "universe": "Minecraft", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "cave-explorer", "name": "Cave Explorer", "universe": "Minecraft", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" },
+    { "identifier": "garden-keeper", "name": "Garden Keeper", "universe": "Minecraft", "sourceAsset": null, "destination": null, "status": "missing-verified-asset" }
+  ],
+  "unmatchedModels": [
+    { "sourceAsset": "models/steve_minecraft.glb", "status": "unmatched", "reason": "No selected character named Steve; not guessed-matched." }
+  ]
+}

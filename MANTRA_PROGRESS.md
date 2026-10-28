@@ -1,6 +1,6 @@
 # Mantra Autonomous Development Progress
 
-**Updated:** 2026-10-27
+**Updated:** 2026-10-28
 
 ## Completed
 
@@ -24,7 +24,17 @@ Task 1 complete locally. Shared game interfaces and Canvas runtime are next.
 5. Finish Tiny Step Trail prototype before adapting the other six games.
 6. Run lint, typecheck, build, local app verification, and update final reports.
 
+## Supabase and AI integration stage
+
+- Audited Supabase SSR clients, middleware, schema, RLS, API routes, Cloudflare Worker, and six agent contracts.
+- Added integration, security, and AI audit reports with truthful live-verification boundaries.
+- Preserved guest/demo mode, local source assets, hidden Play Together implementation, and `index (2).html`.
+- Live Supabase Auth settings check passed (`200`); private bucket `mantra-character-assets` created and verified.
+- Uploaded 24 processed PNGs and 6 GLBs with idempotent upsert; authenticated listing verified both prefixes and sample retrieval returned HTTP 200. Local rollback assets remain intact.
+
 ## Blockers
 
-- No verified PNG/WebP generation tool is available in this session. Use procedural Canvas artwork; do not claim generated raster artwork.
+- Server-only `SUPABASE_SERVICE_ROLE_KEY` is required for Storage metadata/upload verification.
 - Browser/manual interaction verification remains pending until the local app is launched.
+- Direct Worker rate limiting and strict schemas remain required before public exposure.
+- Email verification/password recovery UI remains incomplete.

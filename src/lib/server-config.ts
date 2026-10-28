@@ -2,6 +2,26 @@ export type ProviderConfig =
   | { configured: true; baseUrl: string; token?: string }
   | { configured: false; reason: string };
 
+export class ProviderUnavailableError extends Error {
+  readonly code = "PROVIDER_UNAVAILABLE";
+
+  constructor(message: string) {
+    super(message);
+    this.name = "ProviderUnavailableError";
+  }
+}
+
+export class ProviderRequestError extends Error {
+  readonly code = "PROVIDER_REQUEST_FAILED";
+  readonly status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "ProviderRequestError";
+    this.status = status;
+  }
+}
+
 export function getCloudflareAgentConfig(): ProviderConfig {
   const baseUrl = process.env.CLOUDFLARE_AGENT_URL?.trim();
   if (!baseUrl) {
@@ -49,7 +69,7 @@ export async function callCloudflareAgent<TResponse>(
   signal: AbortSignal,
 ): Promise<TResponse> {
   const config = getCloudflareAgentConfig();
-  if (!config.configured) throw new Error(config.reason);
+  if (!config.configured) throw new ProviderUnavailableError(config.reason);
 
   const headers: HeadersInit = { "Content-Type": "application/json" };
   if (config.token) headers.Authorization = `Bearer ${config.token}`;
@@ -66,7 +86,7 @@ export async function callCloudflareAgent<TResponse>(
     const message = data && typeof data === "object" && "error" in data && data.error
       ? data.error
       : `Cloudflare agent request failed with status ${response.status}.`;
-    throw new Error(message);
+    throw new ProviderRequestError(message, response.status);
   }
   return data as TResponse;
 }

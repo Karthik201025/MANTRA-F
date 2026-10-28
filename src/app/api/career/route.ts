@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { MAX_CAREER_PROMPT_LENGTH, isRecord, textField } from "@/lib/api-validation";
-import { callCloudflareAgent } from "@/lib/server-config";
+import {
+  callCloudflareAgent,
+  ProviderRequestError,
+  ProviderUnavailableError,
+} from "@/lib/server-config";
 
 export const runtime = "nodejs";
 
@@ -31,9 +35,13 @@ export async function POST(request: Request) {
     if (!result.roadmap) return NextResponse.json({ error: "The configured agent returned no roadmap." }, { status: 502 });
     return NextResponse.json({ roadmap: result.roadmap });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "The AI provider request failed.";
-    const status = message.includes("not configured") || message.includes("must be") ? 503 : 502;
-    return NextResponse.json({ error: message }, { status });
+    if (error instanceof ProviderUnavailableError) {
+      return NextResponse.json({ error: error.message, code: error.code }, { status: 503 });
+    }
+    if (error instanceof ProviderRequestError) {
+      return NextResponse.json({ error: "The AI provider request failed.", code: error.code }, { status: 502 });
+    }
+    return NextResponse.json({ error: "The AI provider request failed." }, { status: 502 });
   } finally {
     clearTimeout(timeout);
   }
