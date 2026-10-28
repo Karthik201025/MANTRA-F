@@ -1,22 +1,11 @@
 import { NextResponse } from "next/server";
 import { isRecord, textField } from "@/lib/api-validation";
-import {
-  callCloudflareAgent,
-  ProviderRequestError,
-  ProviderUnavailableError,
-} from "@/lib/server-config";
+import { callAgentGateway } from "@/lib/ai-gateway";
+import { getAiUserContext } from "@/lib/ai-context";
+import { parseAgentResponse } from "@/lib/agent-schemas";
+import { ProviderRequestError, ProviderUnavailableError } from "@/lib/server-config";
 
 export const runtime = "nodejs";
-
-type SafetyReviewResponse = {
-  result?: {
-    severity: "low" | "medium" | "high" | "critical";
-    category: string;
-    action: "dismiss" | "warn" | "hide" | "review_required";
-    reasoning: string;
-    requires_human: boolean;
-  };
-};
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -38,17 +27,8 @@ export async function POST(request: Request) {
   const timeout = setTimeout(() => controller.abort(), 15_000);
 
   try {
-    const result = await callCloudflareAgent<SafetyReviewResponse>(
-      "safety",
-      { content, reason },
-      controller.signal,
-    );
-
-    if (!result.result) {
-      return NextResponse.json({ error: "The safety agent returned no review." }, { status: 502 });
-    }
-
-    return NextResponse.json({ review: result.result });
+    const response = await callAgentGateway("safety", `Review this reported content.\nReason: ${reason}\nContent: ${content}`, await getAiUserContext(), controller.signal);
+    return NextResponse.json(parseAgentResponse("safety", response));
   } catch (error) {
     if (error instanceof ProviderUnavailableError) {
       return NextResponse.json({ error: error.message, code: error.code }, { status: 503 });

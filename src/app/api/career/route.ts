@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
 import { MAX_CAREER_PROMPT_LENGTH, isRecord, textField } from "@/lib/api-validation";
-import {
-  callCloudflareAgent,
-  ProviderRequestError,
-  ProviderUnavailableError,
-} from "@/lib/server-config";
+import { callAgentGateway } from "@/lib/ai-gateway";
+import { getAiUserContext } from "@/lib/ai-context";
+import { parseAgentResponse } from "@/lib/agent-schemas";
+import { ProviderRequestError, ProviderUnavailableError } from "@/lib/server-config";
 
 export const runtime = "nodejs";
-
-type CareerResponse = { roadmap?: unknown };
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -27,13 +24,8 @@ export async function POST(request: Request) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15_000);
   try {
-    const result = await callCloudflareAgent<CareerResponse>(
-      "career",
-      { prompt, displayName },
-      controller.signal,
-    );
-    if (!result.roadmap) return NextResponse.json({ error: "The configured agent returned no roadmap." }, { status: 502 });
-    return NextResponse.json({ roadmap: result.roadmap });
+    const response = await callAgentGateway("career", `User: ${displayName}. Goal: ${prompt}`, await getAiUserContext(), controller.signal);
+    return NextResponse.json(parseAgentResponse("career", response));
   } catch (error) {
     if (error instanceof ProviderUnavailableError) {
       return NextResponse.json({ error: error.message, code: error.code }, { status: 503 });

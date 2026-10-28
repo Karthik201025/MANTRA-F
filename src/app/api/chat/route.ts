@@ -5,15 +5,12 @@ import {
   isRecord,
   textField,
 } from "@/lib/api-validation";
-import {
-  callCloudflareAgent,
-  ProviderRequestError,
-  ProviderUnavailableError,
-} from "@/lib/server-config";
+import { callAiGateway } from "@/lib/ai-gateway";
+import { contextPrompt, getAiUserContext } from "@/lib/ai-context";
+import { parseAgentResponse } from "@/lib/agent-schemas";
+import { ProviderRequestError, ProviderUnavailableError } from "@/lib/server-config";
 
 export const runtime = "nodejs";
-
-type ChatResponse = { reply?: string };
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -35,15 +32,18 @@ export async function POST(request: Request) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15_000);
   try {
-    const result = await callCloudflareAgent<ChatResponse>(
-      "companion",
-      { message, companionName, displayName, history },
-      controller.signal,
-    );
-    if (!result.reply || typeof result.reply !== "string") {
-      return NextResponse.json({ error: "The configured agent returned no reply." }, { status: 502 });
-    }
-    return NextResponse.json({ reply: result.reply });
+    const userContext = await getAiUserContext();
+    const reply = await callAiGateway([
+      { role: "system", content: `You are ${companionName}, a warm and supportive AI companion. Keep replies concise, honest, and practical.\n${contextPrompt(userContext)}` },
+      ...history.filter((item): item is { role: "user" | "assistant"; content: string } =>
+        typeof item === "object" && item !== null &&
+        (item as { role?: unknown }).role !== undefined &&
+        ((item as { role?: unknown }).role === "user" || (item as { role?: unknown }).role === "assistant") &&
+        typeof (item as { content?: unknown }).content === "string",
+      ).map((item) => ({ role: item.role, content: item.content })),
+      { role: "user", content: `${displayName} says: ${message}` },
+    ], controller.signal);
+    return NextResponse.json(parseAgentResponse("companion", JSON.stringify({ reply })));
   } catch (error) {
     if (error instanceof ProviderUnavailableError) {
       return NextResponse.json({ error: error.message, code: error.code }, { status: 503 });

@@ -1,20 +1,11 @@
 import { NextResponse } from "next/server";
 import { isRecord } from "@/lib/api-validation";
-import {
-  callCloudflareAgent,
-  ProviderRequestError,
-  ProviderUnavailableError,
-} from "@/lib/server-config";
+import { callAgentGateway } from "@/lib/ai-gateway";
+import { getAiUserContext } from "@/lib/ai-context";
+import { parseAgentResponse } from "@/lib/agent-schemas";
+import { ProviderRequestError, ProviderUnavailableError } from "@/lib/server-config";
 
 export const runtime = "nodejs";
-
-type WorldSuggestionResponse = {
-  result?: {
-    suggestion: string;
-    reasoning: string;
-    preview: string;
-  };
-};
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -31,17 +22,8 @@ export async function POST(request: Request) {
   const timeout = setTimeout(() => controller.abort(), 15_000);
 
   try {
-    const result = await callCloudflareAgent<WorldSuggestionResponse>(
-      "world",
-      { preferences },
-      controller.signal,
-    );
-
-    if (!result.result) {
-      return NextResponse.json({ error: "The world builder agent returned no suggestion." }, { status: 502 });
-    }
-
-    return NextResponse.json({ suggestion: result.result });
+    const response = await callAgentGateway("world", `Generate a world suggestion for these preferences: ${JSON.stringify(preferences)}`, await getAiUserContext(), controller.signal);
+    return NextResponse.json(parseAgentResponse("world", response));
   } catch (error) {
     if (error instanceof ProviderUnavailableError) {
       return NextResponse.json({ error: error.message, code: error.code }, { status: 503 });

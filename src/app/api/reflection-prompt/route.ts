@@ -1,20 +1,11 @@
 import { NextResponse } from "next/server";
 import { isRecord, textField } from "@/lib/api-validation";
-import {
-  callCloudflareAgent,
-  ProviderRequestError,
-  ProviderUnavailableError,
-} from "@/lib/server-config";
+import { callAgentGateway } from "@/lib/ai-gateway";
+import { getAiUserContext } from "@/lib/ai-context";
+import { parseAgentResponse } from "@/lib/agent-schemas";
+import { ProviderRequestError, ProviderUnavailableError } from "@/lib/server-config";
 
 export const runtime = "nodejs";
-
-type ReflectionPromptResponse = {
-  result?: {
-    prompt: string;
-    context: string;
-    examples?: string[];
-  };
-};
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -31,17 +22,8 @@ export async function POST(request: Request) {
   const timeout = setTimeout(() => controller.abort(), 15_000);
 
   try {
-    const result = await callCloudflareAgent<ReflectionPromptResponse>(
-      "reflection",
-      { context },
-      controller.signal,
-    );
-
-    if (!result.result) {
-      return NextResponse.json({ error: "The reflection agent returned no prompt." }, { status: 502 });
-    }
-
-    return NextResponse.json({ prompt: result.result });
+    const response = await callAgentGateway("reflection", `Generate a reflection prompt for: ${context}`, await getAiUserContext(), controller.signal);
+    return NextResponse.json(parseAgentResponse("reflection", response));
   } catch (error) {
     if (error instanceof ProviderUnavailableError) {
       return NextResponse.json({ error: error.message, code: error.code }, { status: 503 });

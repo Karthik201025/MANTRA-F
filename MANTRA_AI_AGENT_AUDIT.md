@@ -4,43 +4,82 @@ Date: 2026-10-28
 
 ## Provider boundary
 
-- The runtime provider is Cloudflare Workers AI through the `AI` binding in `worker/agents.ts`.
-- The Next.js API routes call the local/remote Worker through `CLOUDFLARE_AGENT_URL` and an optional server-only `CLOUDFLARE_AGENT_TOKEN`.
-- No Anthropic SDK usage exists in the inspected application routes or Worker. The Cloudflare Worker is provider-specific and remains unchanged; no Anthropic SDK was introduced.
-- `worker/env.d.ts` contains generated Cloudflare type markers mentioning other gateway providers. These are generated declarations, not active application integrations.
+- Cloudflare Workers AI is configured locally through server-only `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`, and `CLOUDFLARE_AI_MODEL`.
+- The shared provider implementation is `src/lib/ai-gateway.ts`.
+- No Cloudflare credential uses a `NEXT_PUBLIC_` prefix.
+- Existing Supabase authentication, ownership checks, persistence, UI, and assets remain unchanged.
 
-## Agent contracts
+## Configuration verification
 
-| Agent | Route | Output | Current status |
-|---|---|---|---|
-| Companion | `/api/chat` → Worker `/companion` | `{ reply }` | Implemented through Workers AI |
-| Career Navigator | `/api/career` → `/career` | `{ roadmap }` | Implemented; Worker parses JSON |
-| Quest/Learning | `/api/quest` → `/quest` | `{ activity }` | Implemented; Worker parses JSON |
-| Reflection | `/api/reflection-prompt` → `/reflection` | `{ prompt }` | Implemented; Worker parses JSON |
-| Community Safety | `/api/safety-review` → `/safety` | `{ review }` | Implemented; Worker parses JSON |
-| World Builder | `/api/world-suggestion` → `/world` | `{ suggestion }` | Implemented; Worker parses JSON |
+- `CLOUDFLARE_ACCOUNT_ID`: present in `.env.local`; value not printed.
+- `CLOUDFLARE_API_TOKEN`: present in `.env.local`; value not printed.
+- `CLOUDFLARE_AI_MODEL`: present in `.env.local`; value not printed.
+- Cloudflare model listing request: HTTP 200, success true, 73 models returned.
 
-## Safety controls found
+## Live inference verification
 
-- Next.js routes validate JSON objects and cap user text fields.
-- AI requests use 15-second abort timeouts.
-- Worker requests can require `Authorization: Bearer` using `AGENT_TOKEN`.
-- Worker returns generic provider failure messages instead of provider internals.
-- Supabase server authentication uses the publishable key; the service-role key is not used in frontend code.
+- Initial Cloudflare Workers AI REST inference returned HTTP 400, error code `7000` (`No route for that URI`).
+- Root cause: model path encoding converted the `/` in `@cf/meta/...` into `%2F`.
+- Fixed the gateway to encode model path segments while preserving `/` separators.
+- Retried with the configured model and chat-style `messages` payload: HTTP 200, `success: true`, valid `result.response` received.
+- Credentials were not printed.
 
-## Gaps addressed
+## Personalization gap analysis
 
-- Provider-unavailable and provider-request-failed errors now use typed server-side error classes rather than string-only classification.
-- Route payload limits now have named constants for agent topic/context/reason/preferences budgets.
+- Existing verified identity: Supabase cookie session through `supabase.auth.getUser()`.
+- Existing user-owned records: `profiles`, `reflections`, `community_posts`, and `community_reports`, all protected by RLS.
+- Existing missing layer: no shared server-side context assembly; agent routes previously sent only request fields.
+- No conversation-history, learning-progress, saved-world, or explicit-consent tables were present. These remain unavailable and are not fabricated.
+- New context layer reads only the authenticated user's profile, three recent reflections, and aggregate counts for their own posts/reports.
+- Context is marked as untrusted data inside the prompt and cannot override agent instructions.
 
-## Remaining gaps
+## Agent status
 
-- No rate limiter exists in the local Next.js or Worker routes. Add a deployment-appropriate limiter before public exposure.
-- Worker input validation remains weaker than the Next.js boundary for direct Worker callers: history entries, preferences, topic, difficulty, reason, and display fields need explicit schemas and limits.
-- No agent persistence tables or message/task metadata tables were found in the existing migration.
-- No Supabase Storage migration or upload verification exists. Live upload status is unverified until credentials and permissions are supplied.
-- No Anthropic provider is configured or evidenced; this audit does not claim Anthropic integration.
+| Agent | Route | Status |
+|---|---|---|
+| Companion | `/api/chat` | Uses shared Cloudflare REST gateway; live inference blocked by HTTP 400 |
+| Career Navigator | `/api/career` | Existing optional Worker boundary; migration pending live Companion verification |
+| Quest/Learning | `/api/quest` | Existing optional Worker boundary; migration pending live Companion verification |
+| Reflection | `/api/reflection-prompt` | Existing optional Worker boundary; migration pending live Companion verification |
+| Community Safety | `/api/safety-review` | Existing optional Worker boundary; migration pending live Companion verification |
+| World Builder | `/api/world-suggestion` | Existing optional Worker boundary; migration pending live Companion verification |
 
-## Verification scope
+## Gateway controls
 
-Static inspection completed. Live Cloudflare AI and Supabase calls were not executed. Never treat missing local provider configuration as a successful integration.
+- Provider URL, model, timeout, and credentials are environment-driven.
+- Credentials remain server-side.
+- Conversation messages are role- and length-validated.
+- Non-2xx responses, timeouts, empty responses, and malformed payloads fail closed.
+- Cloudflare REST responses support the Workers AI `{ result: { response } }` shape.
+- Cloudflare-specific code remains isolated from agent routes.
+
+## Per-agent live verification — 2026-10-28
+
+Synthetic non-sensitive Cloudflare Workers AI requests completed independently:
+
+| Agent | HTTP | Response received |
+|---|---:|---|
+| Companion | 200 | yes; previously verified |
+| Career | 200 | yes |
+| Quest | 200 | yes |
+| Reflection | 200 | yes |
+| Safety | 200 | yes |
+| World Builder | 200 | yes |
+
+These direct provider tests confirm inference reachability and response presence. Route-level authenticated integration tests and cross-user isolation tests remain separate and are not claimed here.
+
+## Verification
+
+- Cloudflare model listing: HTTP 200.
+- Cloudflare inference: HTTP 400; not operationally verified.
+- TypeScript: passed before final Cloudflare gateway edits; rerun required.
+- Lint: passed before final Cloudflare gateway edits; rerun required.
+- Production build: passed before final Cloudflare gateway edits; rerun required.
+- Public deployment: not performed.
+
+## Remaining blockers
+
+1. Inspect the redacted Cloudflare 400 error code without exposing token values.
+2. Correct the configured model or request payload if the error identifies a mismatch.
+3. Re-run one real Companion inference.
+4. Migrate the remaining five agents after Companion success.
